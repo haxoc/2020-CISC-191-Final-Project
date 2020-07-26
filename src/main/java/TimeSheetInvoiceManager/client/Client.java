@@ -4,6 +4,7 @@ import TimeSheetInvoiceManager.project.Project;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Client {
@@ -17,8 +18,14 @@ public class Client {
     private String name;
     private String address;
 
-    @OneToMany
-    private HashMap<String, Project> projects = new HashMap<>();
+
+    @OneToMany(
+            mappedBy = "client",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @MapKey(name = "name")
+    private Map<String, Project> projects = new HashMap<>();
 
     protected Client() {
     }
@@ -57,14 +64,14 @@ public class Client {
     }
 
     public void removeProject(Project project) {
-
-    }
-    public void setProjects(HashMap<String, Project> projects) {
-        this.projects = projects;
+        projects.remove(project.getName());
     }
 
-    public HashMap<String, Project> getProjects() {
+    public Map<String, Project> getProjects() {
         return projects;
     }
 
+    public void setProjects(Map<String, Project> projects) {
+        this.projects = projects;
+    }
 }

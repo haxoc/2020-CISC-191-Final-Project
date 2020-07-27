@@ -26,7 +26,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+/*
 
+*/
 
 @SpringBootApplication
 public class App extends Application {
@@ -44,26 +48,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        TabPane tabPane = new TabPane();
+        try {
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
 
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-
-        Tab tab1 = new Tab("Invoices", new Label("Show all Invoices \n" + l));
-        Tab tab2 = new Tab("Clients", new Label("Show all Clients \n" + l));
-        Tab tab3 = new Tab("Projects", new Label("Show all Projects \n" + l));
-
-        tabPane.getTabs().add(tab1);
-        tabPane.getTabs().add(tab2);
-        tabPane.getTabs().add(tab3);
-
-        Scene scene = new Scene(new StackPane(tabPane), 640, 480);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Timesheet Tracker - Invoice Manager");
-
-        primaryStage.show();
+            primaryStage.setTitle("Timesheet Tracker - Invoice Manager");
+            primaryStage.setScene(new Scene(root, 940, 680));
+            primaryStage.show();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Bean

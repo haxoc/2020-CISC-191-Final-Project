@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-
 <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timeSheetInvoiceManager.app.ClientsController">
    <content>
       <VBox prefHeight="200.0" prefWidth="100.0">
@@ -26,11 +25,13 @@
                <children>
                   <VBox spacing="15.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TextField promptText="Name" />
-                        <TextField promptText="Hourly Rate" />
+                         <TextField fx:id="txtName" promptText="Name" />
+                        <TextField fx:id="txtRate" promptText="Hourly Rate" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label text="Status" />
+    <Label fx:id="weatherLabel"/>
+
+                               <Label text="Status" />
                               <Region HBox.hgrow="ALWAYS" />
                               <ToggleButton mnemonicParsing="false" text="Active" />
                            </children>

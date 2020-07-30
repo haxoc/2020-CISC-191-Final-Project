@@ -29,7 +29,7 @@
                         <TextField fx:id="txtRate" promptText="Hourly Rate" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-    <Label fx:id="weatherLabel"/>
+    <Label fx:id="weatherLabel" />
 
                                <Label text="Status" />
                               <Region HBox.hgrow="ALWAYS" />
@@ -50,7 +50,7 @@
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <Label text="Address" />
-                              <TextArea />
+                              <TextArea fx:id="txtAddress" />
                            </children>
                         </VBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -61,7 +61,7 @@
                               <Button mnemonicParsing="false" text="Add" />
                            </children>
                         </HBox>
-                        <ListView VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="contacts" VBox.vgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets left="15.0" />

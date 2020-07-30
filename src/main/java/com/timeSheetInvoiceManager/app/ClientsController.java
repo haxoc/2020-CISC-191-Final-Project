@@ -18,8 +18,15 @@ import com.timeSheetInvoiceManager.app.client.Client;
 import com.timeSheetInvoiceManager.app.client.ClientRepository;
 import com.timeSheetInvoiceManager.app.project.Project;
 import com.timeSheetInvoiceManager.app.project.ProjectRepository;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
+import java.time.LocalDate;
+import java.util.Optional;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.fxml.Initializable;
 import org.springframework.context.annotation.Bean;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -27,9 +34,10 @@ import org.springframework.context.annotation.Bean;
  */
 @Component
 @FxmlView("clients.fxml")
-public class ClientsController {
+public class ClientsController implements Initializable{
 
     private ClientRepository clientRepository;
+    private Client client;
 
     @FXML
     private Label weatherLabel;
@@ -37,6 +45,8 @@ public class ClientsController {
     private Button btnSave;
     @FXML
     private TextField txtName;
+    @FXML
+    private TextArea txtAddress;
     @FXML
     private TextField txtRate;
 
@@ -47,6 +57,18 @@ public class ClientsController {
         this.weatherService = weatherService;
         this.clientRepository = clientRepository;
     }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("Clients Controller initialized");
+        Optional<Client> c = clientRepository.findById(1);
+        c.ifPresent((client) -> {
+            System.out.println(client.toString());
+            System.out.println(client.getName());
+            this.txtName.setText(client.getName());
+            this.txtAddress.setText("Client Address");
+        });
+    }    
 
     public void loadWeatherForecast(ActionEvent actionEvent) {
         this.weatherLabel.setText("weatherService.getWeatherForecast()");
@@ -54,11 +76,6 @@ public class ClientsController {
     public void saveButtonClicked(ActionEvent actionEvent) {
         System.out.println("Save clicked");
         System.out.println("I am calling clientRepository to console from SaveButton");
-        clientRepository.findAll().forEach(System.out::println);
-        var firstClient = clientRepository.findById(1);
-        this.txtName.setText(firstClient.toString());
-        this.weatherLabel.setText(weatherService.getWeatherForecast());
-
     }
 
 }

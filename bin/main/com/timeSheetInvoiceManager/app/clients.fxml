@@ -25,17 +25,13 @@
                <children>
                   <VBox spacing="15.0" HBox.hgrow="ALWAYS">
                      <children>
-                         <TextField fx:id="txtName" promptText="Name" />
-                        <TextField fx:id="txtRate" promptText="Hourly Rate" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-    <Label fx:id="weatherLabel"/>
-
-                               <Label text="Status" />
+                              <Label text="Clients" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <ToggleButton mnemonicParsing="false" text="Active" />
                            </children>
                         </HBox>
+                        <ListView fx:id="listContacts" onMouseClicked="#clientListClicked" VBox.vgrow="ALWAYS" />
                      </children>
                      <HBox.margin>
                         <Insets />
@@ -45,23 +41,25 @@
                      </padding>
                   </VBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <VBox spacing="15.0" HBox.hgrow="ALWAYS">
+                  <VBox fx:id="b" spacing="15.0" HBox.hgrow="ALWAYS">
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
+                               <TextField fx:id="txtName" promptText="Name" />
+                              <TextField fx:id="txtRate" promptText="Hourly Rate" />
                               <Label text="Address" />
-                              <TextArea />
+                              <TextArea fx:id="txtAddress" />
                            </children>
                         </VBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Label text="Contacts" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" text="Remove" />
-                              <Button mnemonicParsing="false" text="Add" />
+                              <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddClicked" text="Add" />
                            </children>
                         </HBox>
-                        <ListView VBox.vgrow="ALWAYS" />
+
+                         <Label text="Status" />
+                        <ToggleButton fx:id="btnActive" mnemonicParsing="false" onAction="#btnActiveClicked" text="Active" />
                      </children>
                      <padding>
                         <Insets left="15.0" />
@@ -75,8 +73,8 @@
             <HBox spacing="10.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" text="Remove" />
-                  <Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveButtonClicked" text="Save" />
+                  <Button fx:id="btnRemove" mnemonicParsing="false" onAction="#btnRemoveClicked" text="Remove" />
+                  <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" text="Save" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

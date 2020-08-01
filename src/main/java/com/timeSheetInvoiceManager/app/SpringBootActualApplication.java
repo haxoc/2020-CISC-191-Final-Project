@@ -40,7 +40,7 @@ public class SpringBootActualApplication {
     @Bean
     public CommandLineRunner demo(ClientRepository repo, ProjectRepository projectRepository) {
         return (args) -> {
-            Client client1 = new Client("Client 2", "some address");
+            Client client1 = new Client("Client 2", 100.00, "some address");
             for (int i = 1; i <= 10; i++) {
                 Project project = new Project("Project-" + i, 35, client1);
                 client1.addProject(project);

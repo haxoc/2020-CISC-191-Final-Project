@@ -1,6 +1,7 @@
 package com.timeSheetInvoiceManager.app.client;
 
 import com.timeSheetInvoiceManager.app.project.Project;
+import java.util.Currency;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class Client {
 
     private String name;
     private String address;
+    private Double rate;
 
 
     @OneToMany(
@@ -30,9 +32,10 @@ public class Client {
     protected Client() {
     }
 
-    public Client(String name, String address) {
+    public Client(String name, Double rate, String address) {
         this.name = name;
         this.address = address;
+        this.rate = rate;
     }
 
     public Integer getId() {
@@ -53,6 +56,14 @@ public class Client {
 
     public String getAddress() {
         return address;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public Double getRate() {
+        return rate;
     }
 
     public void setAddress(String address) {
@@ -80,6 +91,8 @@ public class Client {
         return "Client - override {" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", rate='" + rate + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

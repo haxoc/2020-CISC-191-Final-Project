@@ -9,8 +9,10 @@ import java.util.Map;
 
 @Entity
 public class TimeSheet {
-
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE
+    )
     private Integer id;
 
     @OneToMany(
@@ -22,7 +24,6 @@ public class TimeSheet {
     private final Map<String, TimeSheetEntry> entries = new HashMap<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     private Project project;
 
     public TimeSheet(Project project) {

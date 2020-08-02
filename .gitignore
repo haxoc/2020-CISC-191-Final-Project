@@ -34,3 +34,4 @@ out/
 .vscode/
 
 *.class
+bin/main/com/timeSheetInvoiceManager/app/SpringBootActualApplication.class

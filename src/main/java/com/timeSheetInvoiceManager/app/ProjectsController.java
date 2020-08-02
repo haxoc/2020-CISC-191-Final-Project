@@ -169,13 +169,17 @@ public class ProjectsController implements Initializable {
  
         
         entryList = FXCollections.observableArrayList();
-        Optional<TimeSheetEntry> tse = timeSheetEntryRepository.findById(19);
-        System.out.println(tse);
-        tse.ifPresent((entry) -> {
-            System.out.println(entry);
 
-            entryList.add(entry);
+        p.forEach((project) -> {
+            Optional<TimeSheetEntry> tse = timeSheetEntryRepository.findById(project.getId());
+            System.out.println(tse);
+            tse.ifPresent((entry) -> {
+                System.out.println(entry);
+
+                entryList.add(entry);
+            });
         });
+
         tableEntries.setItems(entryList);
     }
 

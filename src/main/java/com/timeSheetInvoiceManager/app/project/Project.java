@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Project {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Integer id;
 

@@ -9,7 +9,7 @@ public class TimeSheetEntry {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Integer id;
 
@@ -115,7 +115,7 @@ public class TimeSheetEntry {
                 ", description='" + description + '\'' +
                 ", time=" + time +
                 ", projectId=" + projectId +
-                ", timeSheet=" + timeSheet +
+                ", timeSheetId=" + timeSheet.getId() +
                 '}';
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 public class TimeSheet {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Integer id;
 
@@ -70,7 +70,7 @@ public class TimeSheet {
     public String toString() {
         return "TimeSheet{" +
                 "id=" + id +
-                ", project='" + project + '\'' +
+                ", projectid='" + project.getId() + '\'' +
                 '}';
     }
 }

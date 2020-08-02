@@ -9,13 +9,14 @@ public class TimeSheetEntry {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO
+            strategy = GenerationType.SEQUENCE
     )
     private Integer id;
 
     private LocalDate date;
     private String employeeName;
     private String description;
+    private Integer projectId;
     private final String mapId;
 
     /**
@@ -35,12 +36,13 @@ public class TimeSheetEntry {
         mapId = "";
     }
 
-    public TimeSheetEntry(LocalDate date, String employeeName, String description, double time, TimeSheet timeSheet) {
+    public TimeSheetEntry(LocalDate date, String employeeName, String description, double time, TimeSheet timeSheet, Integer projectId) {
         this.date = date;
         this.employeeName = employeeName;
         this.description = description;
         this.time = time;
         this.timeSheet = timeSheet;
+        this.projectId = projectId;
         mapId = date.toString() + employeeName;
     }
 
@@ -84,6 +86,14 @@ public class TimeSheetEntry {
         this.time = time;
     }
 
+    public double getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
     public TimeSheet getTimeSheet() {
         return timeSheet;
     }
@@ -104,6 +114,8 @@ public class TimeSheetEntry {
                 ", employeeName='" + employeeName + '\'' +
                 ", description='" + description + '\'' +
                 ", time=" + time +
+                ", projectId=" + projectId +
+                ", timeSheet=" + timeSheet +
                 '}';
     }
 }

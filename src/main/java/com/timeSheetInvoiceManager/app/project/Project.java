@@ -2,6 +2,7 @@ package com.timeSheetInvoiceManager.app.project;
 
 import com.timeSheetInvoiceManager.app.client.Client;
 import com.timeSheetInvoiceManager.app.timesheet.TimeSheet;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -87,6 +88,7 @@ public class Project {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rate=" + rate +
+                ", clientID=" + client.getId() +
                 '}';
     }
 }

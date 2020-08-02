@@ -80,15 +80,7 @@ public class ClientsController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Clients Controller initialized");
-        /*
-        Optional<Client> c = clientRepository.findById(1);
-        c.ifPresent((client) -> {
-            System.out.println(client.toString());
-            System.out.println(client.getName());
-            this.txtName.setText(client.getName());
-            this.txtAddress.setText(client.getAddress());
-        });
-        */
+
         //Show names to Contact list
         listContacts.setItems(clientList);
         clientRepository.findAll().forEach((client) -> {

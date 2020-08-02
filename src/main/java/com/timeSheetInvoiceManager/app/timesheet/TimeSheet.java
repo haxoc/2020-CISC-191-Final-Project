@@ -1,6 +1,7 @@
 package com.timeSheetInvoiceManager.app.timesheet;
 
 import com.timeSheetInvoiceManager.app.project.Project;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -62,5 +63,13 @@ public class TimeSheet {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeSheet{" +
+                "id=" + id +
+                ", project='" + project + '\'' +
+                '}';
     }
 }

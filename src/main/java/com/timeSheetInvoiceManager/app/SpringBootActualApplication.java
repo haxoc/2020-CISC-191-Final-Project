@@ -41,11 +41,22 @@ public class SpringBootActualApplication {
     public CommandLineRunner demo(ClientRepository repo, ProjectRepository projectRepository) {
         return (args) -> {
             Client client1 = new Client("Client 2", 100.00, "some address");
+
             for (int i = 1; i <= 10; i++) {
                 Project project = new Project("Project-" + i, 35, client1);
                 client1.addProject(project);
+                System.out.println(project);
+
             }
             repo.save(client1);
+            Client client3 = new Client("Client 3", 103.00, "some address 03");
+            for (int i = 1; i <= 10; i++) {
+                Project project = new Project("Project-" + i, 35, client1);
+                client1.addProject(project);
+                System.out.println(project);
+            }
+            repo.save(client3);
+
             Integer clientId = client1.getId();
 
             System.out.println("saved client ID = " + clientId);
@@ -54,8 +65,9 @@ public class SpringBootActualApplication {
             c.ifPresent((client) -> {
                 client.getProjects().forEach((name, project) -> {
                     for (int i = 5; i <= 20; i++) {
-                        project.getTimeSheet().addEntry(new TimeSheetEntry(LocalDate.now(), "employee " + i + " name",
-                                "desc: " + i, Math.round(Math.random() * 10), project.getTimeSheet()));
+                        TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), "employee " + i + " name", "desc: " + i, Math.round(Math.random() * 10), project.getTimeSheet(), project.getId());
+                        project.getTimeSheet().addEntry(timeSheetEntry);
+                        System.out.println("timeSheetEntry = " + timeSheetEntry);
                     }
                 });
             });

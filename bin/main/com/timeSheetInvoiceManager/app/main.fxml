@@ -23,11 +23,7 @@
          </Tab>
          <Tab fx:id="projects" closable="false" text="Projects">
             <content>
-                <fx:include source="main-stage.fxml" />
-
-                <!--
                 <fx:include source="projects.fxml" />
--->
             </content>
          </Tab>
          <Tab fx:id="invoices" closable="false" text="Invoices">

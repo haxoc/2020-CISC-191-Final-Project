@@ -1,6 +1,8 @@
 package com.timeSheetInvoiceManager.app.client;
 
 import com.timeSheetInvoiceManager.app.project.Project;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheet;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
 import java.util.Currency;
 
 import javax.persistence.*;

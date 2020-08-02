@@ -106,9 +106,7 @@ public class SpringBootActualApplication {
                 
                 System.out.println("timeSheetEntryRepository.findById(19)");
                 Optional<TimeSheetEntry> timeSheetEntry = timeSheetEntryRepository.findById(19);
-                timeSheetEntry.ifPresent((entry) -> {
-                    System.out.println(entry);
-                });
+                System.out.println(timeSheetEntry);
           }
         };
     }

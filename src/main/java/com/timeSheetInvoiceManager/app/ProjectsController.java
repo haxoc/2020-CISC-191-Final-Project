@@ -150,7 +150,7 @@ public class ProjectsController implements Initializable {
 
         // Set up the table data
         entryIdCol.setCellValueFactory(
-            new PropertyValueFactory<TimeSheetEntry,Integer>("id")
+            new PropertyValueFactory<TimeSheetEntry,Integer>("Id")
         );
         entryDateCol.setCellValueFactory(
             new PropertyValueFactory<TimeSheetEntry,LocalDate>("date")
@@ -168,52 +168,16 @@ public class ProjectsController implements Initializable {
         */
  
         
-        //entryList = FXCollections.observableArrayList();
+        entryList = FXCollections.observableArrayList();
         Optional<TimeSheetEntry> tse = timeSheetEntryRepository.findById(19);
         System.out.println(tse);
-        
-        /*
-        timeSheetRepository.findAll().forEach((entry) -> {
+        tse.ifPresent((entry) -> {
             System.out.println(entry);
-            //entryList.add(entry);
+
+            entryList.add(entry);
         });
-        */
-        //Iterable<TimeSheetEntry> te = timeSheetEntryRepository.findAll();
-        //System.out.println(te);
-
-        //listEntries.getItems().clear();
-        //timeEntriesList = FXCollections.observableArrayList("No Time Entries");
-        //listEntries.setItems(timeEntriesList);
-/*
-        p.forEach((project) -> {
-            Map<String, Project> projects = client.getProjects();
-
-            client.getProjects().forEach((name, project) -> {
-                projectList.add(project.getName());
-            });
-        });
-*/
-        /*
-        listProjects.setItems(projectList);
-
-        System.out.println(selectedClient);
-
-        List<Client> c = clientRepository.findByName(selectedClient);
-        System.out.println("List<Client> c = " + c.toString());
-
-        listProjects.getItems().clear();
-        projectList = FXCollections.observableArrayList("No projects");
-        listProjects.setItems(projectList);
-
-        c.forEach((client) -> {
-            Map<String, Project> projects = client.getProjects();
-
-            client.getProjects().forEach((name, project) -> {
-                projectList.add(project.getName());
-            });
-        });
-        */
-}
+        tableEntries.setItems(entryList);
+    }
 
     public void saveButtonClicked() {
         System.out.println("Save clicked");

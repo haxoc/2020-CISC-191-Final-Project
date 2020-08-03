@@ -17,7 +17,8 @@ public class Client {
 
     private String name;
     private String address;
-
+    private double hourlyRate;
+    private boolean isActive;
 
     @OneToMany(
             mappedBy = "client",
@@ -27,12 +28,15 @@ public class Client {
     @MapKey(name = "name")
     private Map<String, Project> projects = new HashMap<>();
 
+
     protected Client() {
     }
 
-    public Client(String name, String address) {
+    public Client(String name, String address, double hourlyRate) {
         this.name = name;
         this.address = address;
+        this.hourlyRate = hourlyRate;
+        isActive = true;
     }
 
     public Integer getId() {
@@ -57,6 +61,25 @@ public class Client {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+        if(!isActive) {
+            projects.forEach((name, project) -> project.setActive(false));
+        }
     }
 
     public void addProject(Project project) {

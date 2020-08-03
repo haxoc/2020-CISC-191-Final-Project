@@ -34,3 +34,11 @@ out/
 .vscode/
 
 *.class
+
+## Database files ##
+database.log
+database.properties
+database.tmp
+database.script
+database.lck
+

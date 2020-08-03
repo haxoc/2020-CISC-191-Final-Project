@@ -1,2 +1,72 @@
 /*C12*/SET SCHEMA PUBLIC
+drop table if exists client CASCADE 
+drop table if exists invoice CASCADE 
+drop table if exists project CASCADE 
+drop table if exists time_sheet CASCADE 
+drop table if exists time_sheet_entry CASCADE 
+drop sequence hibernate_sequence if exists
+create sequence hibernate_sequence start with 1 increment by 1
+create table client (id integer not null, address varchar(255), hourly_rate double not null, is_active boolean not null, name varchar(255), primary key (id))
+create table invoice (invoice_number bigint not null, amount double not null, begin_service_date date, client_name varchar(255), description varchar(255), end_service_date date, invoice_date date, total_hours double not null, primary key (invoice_number))
+create table project (id integer not null, is_active boolean not null, name varchar(255), rate double not null, client_id integer, primary key (id))
+create table time_sheet (id integer not null, begin_date date, end_date date, project_id integer, primary key (id))
+create table time_sheet_entry (id integer not null, date date, description varchar(255), employee_name varchar(255), map_id varchar(255), time double not null, time_sheet_id integer, primary key (id))
+alter table project add constraint FK8nw995uro0115f1go0dmrtn2d foreign key (client_id) references client
+alter table time_sheet add constraint FKhihat8qpkv33igt868vexlk9v foreign key (project_id) references project
+alter table time_sheet_entry add constraint FK7n9j3wq83ot0bfbbwq2qe3bms foreign key (time_sheet_id) references time_sheet
+INSERT INTO CLIENT VALUES(1,'some address',55.0E0,TRUE,'Client 1')
+INSERT INTO PROJECT VALUES(2,FALSE,'Project-1',55.0E0,1)
+INSERT INTO PROJECT VALUES(3,FALSE,'Project-2',55.0E0,1)
+INSERT INTO PROJECT VALUES(4,FALSE,'Project-3',55.0E0,1)
+INSERT INTO PROJECT VALUES(5,FALSE,'Project-10',55.0E0,1)
+INSERT INTO PROJECT VALUES(6,FALSE,'Project-8',55.0E0,1)
+INSERT INTO PROJECT VALUES(7,FALSE,'Project-9',55.0E0,1)
+INSERT INTO PROJECT VALUES(8,FALSE,'Project-4',55.0E0,1)
+INSERT INTO PROJECT VALUES(9,FALSE,'Project-5',55.0E0,1)
+INSERT INTO PROJECT VALUES(10,FALSE,'Project-6',55.0E0,1)
+INSERT INTO PROJECT VALUES(11,FALSE,'Project-7',55.0E0,1)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 12
+COMMIT
+INSERT INTO INVOICE VALUES(100892,1375.0E0,'2020-08-02','Client 1','This is an invoice for client Client 1','2020-08-31','2020-08-05',25.0E0)
+COMMIT
+INSERT INTO TIME_SHEET VALUES(12,'2020-08-02','2020-08-31',2)
+INSERT INTO TIME_SHEET_ENTRY VALUES(13,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,12)
+INSERT INTO TIME_SHEET VALUES(14,'2020-08-02','2020-08-31',3)
+INSERT INTO TIME_SHEET_ENTRY VALUES(15,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,14)
+INSERT INTO TIME_SHEET VALUES(16,'2020-08-02','2020-08-31',4)
+INSERT INTO TIME_SHEET_ENTRY VALUES(17,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,16)
+INSERT INTO TIME_SHEET VALUES(18,'2020-08-02','2020-08-31',5)
+INSERT INTO TIME_SHEET_ENTRY VALUES(19,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,18)
+INSERT INTO TIME_SHEET VALUES(20,'2020-08-02','2020-08-31',6)
+INSERT INTO TIME_SHEET_ENTRY VALUES(21,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,20)
+INSERT INTO TIME_SHEET VALUES(22,'2020-08-02','2020-08-31',7)
+INSERT INTO TIME_SHEET_ENTRY VALUES(23,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,22)
+INSERT INTO TIME_SHEET VALUES(24,'2020-08-02','2020-08-31',8)
+INSERT INTO TIME_SHEET_ENTRY VALUES(25,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,24)
+INSERT INTO TIME_SHEET VALUES(26,'2020-08-02','2020-08-31',9)
+INSERT INTO TIME_SHEET_ENTRY VALUES(27,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,26)
+INSERT INTO TIME_SHEET VALUES(28,'2020-08-02','2020-08-31',10)
+INSERT INTO TIME_SHEET_ENTRY VALUES(29,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,28)
+INSERT INTO TIME_SHEET VALUES(30,'2020-08-02','2020-08-31',11)
+INSERT INTO TIME_SHEET_ENTRY VALUES(31,'2020-08-02','this is a description','employee ','2020-08-02employee ',2.5E0,30)
+ALTER SEQUENCE PUBLIC.HIBERNATE_SEQUENCE RESTART WITH 32
+COMMIT
+DISCONNECT
+/*C13*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C14*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C15*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C16*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C17*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C18*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C19*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C20*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C21*/SET SCHEMA PUBLIC
 DISCONNECT

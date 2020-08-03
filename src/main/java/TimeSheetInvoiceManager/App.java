@@ -2,10 +2,13 @@ package TimeSheetInvoiceManager;
 
 import TimeSheetInvoiceManager.client.Client;
 import TimeSheetInvoiceManager.client.ClientRepository;
+import TimeSheetInvoiceManager.invoice.Invoice;
+import TimeSheetInvoiceManager.invoice.InvoiceRepository;
 import TimeSheetInvoiceManager.project.Project;
 import TimeSheetInvoiceManager.project.ProjectRepository;
 //import TimeSheetInvoiceManager.timesheet.TimeSheetEntry;
 //import TimeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
+import TimeSheetInvoiceManager.timesheet.TimeSheet;
 import TimeSheetInvoiceManager.timesheet.TimeSheetEntry;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,6 +26,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,13 +65,14 @@ public class App extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(ClientRepository repo, ProjectRepository projectRepository) {
+    public CommandLineRunner demo(ClientRepository repo, ProjectRepository projectRepository, InvoiceRepository invoiceRepository) {
         return (args) -> {
-            Client client1 = new Client("Client 1", "some address");
+            Client client1 = new Client("Client 1", "some address", 55);
             for (int i = 1; i <= 10; i++) {
-                Project project = new Project("Project-" + i, 35, client1);
+                Project project = new Project("Project-" + i, client1.getHourlyRate(), client1);
                 client1.addProject(project);
             }
+
             repo.save(client1);
             Integer clientId = client1.getId();
 
@@ -77,11 +82,18 @@ public class App extends Application {
             c.ifPresent((client) -> {
                 client.getProjects().forEach((name, project) -> {
                     for (int i = 5; i <= 20; i++) {
-                        project.getTimeSheet().addEntry(new TimeSheetEntry(LocalDate.now(), "employee " + i + " name",
-                                "desc: " + i, Math.round(Math.random() * 10), project.getTimeSheet()));
+                        project.addTimeSheet(new TimeSheet(project, LocalDate.now(), LocalDate.of(2020, 8,
+                                31)));
+                        project.getTimeSheets().forEach((beginDate, timeSheet) -> timeSheet.addEntry(new TimeSheetEntry(LocalDate.now(), "employee ",
+                                "this is a description", 2.5, timeSheet)));
                     }
                 });
+                Invoice c1Invoice = new Invoice(100892L, client, LocalDate.now(),
+                        LocalDate.of(2020, 8, 31), LocalDate.now().plusDays(3),
+                        "This is an invoice for client " + client.getName());
+                invoiceRepository.save(c1Invoice);
             });
+
 
             if (c.isPresent()) {
                 client1 = c.get();

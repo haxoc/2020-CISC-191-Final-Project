@@ -1,11 +1,14 @@
 package com.timeSheetInvoiceManager.app.project;
 
+
 import com.timeSheetInvoiceManager.app.client.Client;
 import com.timeSheetInvoiceManager.app.timesheet.TimeSheet;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
-import com.sun.istack.NotNull;
+
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Project {
@@ -19,15 +22,18 @@ public class Project {
 
     private double rate;
 
-    @OneToOne(
-            cascade = CascadeType.ALL,
-            mappedBy = "project"
-    )
-    private TimeSheet timeSheet;
+    private boolean isActive;
 
-    @ManyToOne(
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "project",
             fetch = FetchType.EAGER
     )
+    @MapKey(name = "beginDate")
+    private Map<LocalDate, TimeSheet> timeSheets;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
 
@@ -35,7 +41,7 @@ public class Project {
         this.name = name;
         this.rate = rate;
         this.client = client;
-        timeSheet = new TimeSheet(this);
+        timeSheets = new HashMap<>();
     }
 
     protected Project() {
@@ -49,9 +55,6 @@ public class Project {
         this.rate = rate;
     }
 
-    public TimeSheet getTimeSheet() {
-        return timeSheet;
-    }
 
     public String getName() {
         return name;
@@ -65,12 +68,28 @@ public class Project {
         return id;
     }
 
-    public void setId(Integer id) {
+    protected void setId(Integer id) {
         this.id = id;
     }
 
-    public void setTimeSheet(TimeSheet timeSheet) {
-        this.timeSheet = timeSheet;
+    public void setTimeSheets(Map<LocalDate, TimeSheet> timeSheets) {
+        this.timeSheets = timeSheets;
+    }
+
+    public Map<LocalDate, TimeSheet> getTimeSheets() {
+        return timeSheets;
+    }
+
+    public TimeSheet getTimeSheet(LocalDate yearMonth) {
+        return timeSheets.get(yearMonth);
+    }
+
+    public void addTimeSheet(TimeSheet timeSheet) {
+        timeSheets.put(timeSheet.getBeginDate(), timeSheet);
+    }
+
+    public void removeTimeSheet(LocalDate beginDate) {
+        timeSheets.remove(beginDate);
     }
 
     public Client getClient() {
@@ -80,6 +99,14 @@ public class Project {
     public void setClient(Client client) {
         this.client = client;
         client.addProject(this);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

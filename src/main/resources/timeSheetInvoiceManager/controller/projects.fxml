@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<TitledPane animated="false" collapsible="false" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timeSheetInvoiceManager.controller.ProjectsController">
+<content>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
+         <children>
+            <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+               <items>
+                  <ListView fx:id="listClients" onMouseClicked="#clientListClicked" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="listProjects" onMouseClicked="#projectListClicked" prefHeight="200.0" prefWidth="200.0" />
+               </items>
+            </SplitPane>
+        <VBox VBox.vgrow="ALWAYS">
+            <children>
+              <TableView fx:id="tableEntries" VBox.vgrow="ALWAYS">
+                <columns>
+                  <TableColumn fx:id="entryDateCol" editable="false" maxWidth="300.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Date" />
+                  <TableColumn fx:id="entryNameCol" editable="false" maxWidth="500.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Employee" />
+                    <TableColumn fx:id="entryDescCol" editable="false" minWidth="300.0" prefWidth="300.0" sortable="false" text="Description" />
+                    <TableColumn editable="false" maxWidth="100.0" minWidth="50.0" prefWidth="100.0" sortable="false" text="Hours" />
+                </columns>
+                  <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+              </TableView>
+              <HBox spacing="10.0">
+                  <children>
+                        <DatePicker fx:id="dateChooser" />
+                        <TextField fx:id="txtEmployee" promptText="Employee" />
+                        <TextField fx:id="txtDescription" promptText="Description" />
+                    <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id= "btnDelete" mnemonicParsing="false" onAction="#btnDeleteClicked" text="Delete" />
+                    <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#btnEditClicked" text="Edit" />
+                    <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddClicked" text="Add" />
+                  </children>
+                  <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+              </HBox>
+            </children>
+        </VBox>
+         </children>
+      </VBox>
+</content>
+</TitledPane>

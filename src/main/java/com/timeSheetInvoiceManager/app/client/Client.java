@@ -1,6 +1,9 @@
 package com.timeSheetInvoiceManager.app.client;
 
 import com.timeSheetInvoiceManager.app.project.Project;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheet;
+import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
+import java.util.Currency;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -17,9 +20,8 @@ public class Client {
 
     private String name;
     private String address;
-
     private Double rate;
-    private boolean isActive;
+
 
     @OneToMany(
             mappedBy = "client",
@@ -29,15 +31,13 @@ public class Client {
     @MapKey(name = "name")
     private Map<String, Project> projects = new HashMap<>();
 
-
     protected Client() {
     }
 
-    public Client(String name, String address, Double hourlyRate) {
+    public Client(String name, Double rate, String address) {
         this.name = name;
         this.address = address;
-        this.rate = hourlyRate;
-        isActive = true;
+        this.rate = rate;
     }
 
     public Integer getId() {
@@ -70,18 +70,6 @@ public class Client {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-        if(!isActive) {
-            projects.forEach((name, project) -> project.setActive(false));
-        }
     }
 
     public void addProject(Project project) {

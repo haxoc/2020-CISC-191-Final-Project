@@ -129,7 +129,8 @@ public class ClientsController implements Initializable {
 
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
-            clientRepository.save(Client.NONE);
+            Client newClient = new Client(txtName.getText(), Double.parseDouble(txtRate.getText()), txtAddress.getText());
+            clientRepository.save(newClient);
             System.out.println("Client saved");
 
         } catch (NumberFormatException e) {

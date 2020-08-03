@@ -105,8 +105,8 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client - override {" +
-                ", name='" + name + '\'' +
+        return "Client {" +
+                "name='" + name + '\'' +
                 ", rate='" + rate + '\'' +
                 ", address='" + address + '\'' +
                 '}';

@@ -12,7 +12,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.IndexedCell?>
 
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timeSheetInvoiceManager.app.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
     <children>
   <TabPane prefHeight="600.0" prefWidth="600.0">
      <tabs>

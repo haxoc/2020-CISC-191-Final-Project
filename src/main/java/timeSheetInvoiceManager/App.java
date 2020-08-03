@@ -1,4 +1,4 @@
-package com.timeSheetInvoiceManager.app;
+package timeSheetInvoiceManager;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import timeSheetInvoiceManager.controller.MainController;
 
 public class App extends Application {
 

@@ -1,7 +1,6 @@
-package com.timeSheetInvoiceManager.app.timesheet;
+package timeSheetInvoiceManager.timesheet;
 
-import com.timeSheetInvoiceManager.app.project.Project;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
+import timeSheetInvoiceManager.project.Project;
 
 import javax.persistence.*;
 import java.time.LocalDate;

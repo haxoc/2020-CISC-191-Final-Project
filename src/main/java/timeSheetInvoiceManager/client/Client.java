@@ -1,6 +1,6 @@
-package com.timeSheetInvoiceManager.app.client;
+package timeSheetInvoiceManager.client;
 
-import com.timeSheetInvoiceManager.app.project.Project;
+import timeSheetInvoiceManager.project.Project;
 
 import javax.persistence.*;
 import java.util.HashMap;

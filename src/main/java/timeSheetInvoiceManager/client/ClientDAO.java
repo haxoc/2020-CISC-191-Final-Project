@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.timeSheetInvoiceManager.app.client;
+package timeSheetInvoiceManager.client;
 
 import javafx.collections.ObservableList;
-import com.timeSheetInvoiceManager.app.client.ClientRepository;
-import com.timeSheetInvoiceManager.app.client.Client;
 
 /**
  *

@@ -17,7 +17,21 @@
       <HBox>
          <children>
             <Region HBox.hgrow="ALWAYS" />
-            <ListView id="clientList" fx:id="listContacts" onMouseClicked="#clientListClicked" />
+            <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox>
+                     <children>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddClicked" text="Add">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <ListView id="clientList" fx:id="listContacts" onMouseClicked="#clientListClicked" />
+               </children>
+            </VBox>
             <Region layoutX="489.0" layoutY="21.0" HBox.hgrow="ALWAYS" />
             <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                <children>

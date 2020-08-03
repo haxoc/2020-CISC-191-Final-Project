@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.timeSheetInvoiceManager.app;
+package timeSheetInvoiceManager;
 
 import javafx.application.Application;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
 
-import com.timeSheetInvoiceManager.app.client.Client;
-import com.timeSheetInvoiceManager.app.client.ClientRepository;
-import com.timeSheetInvoiceManager.app.project.Project;
-import com.timeSheetInvoiceManager.app.project.ProjectRepository;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntry;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheetEntryRepository;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheet;
-import com.timeSheetInvoiceManager.app.timesheet.TimeSheetRepository;
+import timeSheetInvoiceManager.client.Client;
+import timeSheetInvoiceManager.client.ClientRepository;
+import timeSheetInvoiceManager.project.Project;
+import timeSheetInvoiceManager.project.ProjectRepository;
+import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
+import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
+import timeSheetInvoiceManager.timesheet.TimeSheet;
+import timeSheetInvoiceManager.timesheet.TimeSheetRepository;
 
 import java.util.Optional;
 import java.time.LocalDate;

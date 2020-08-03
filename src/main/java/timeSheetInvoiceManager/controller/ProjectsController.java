@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package timeSheetInvoiceManager;
+package timeSheetInvoiceManager.controller;
 
 import javafx.event.ActionEvent;
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.client.ClientRepository;
 import timeSheetInvoiceManager.project.Project;
+import timeSheetInvoiceManager.services.MainServiceCoordinator;
 import timeSheetInvoiceManager.timesheet.TimeSheet;
 import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
 
@@ -92,6 +93,7 @@ public class ProjectsController implements Initializable {
     @Autowired
     public ProjectsController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
+        MainServiceCoordinator.getInstance().setProjectsController(this);
     }
 
     @Override

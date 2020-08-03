@@ -1,6 +1,5 @@
-package com.timeSheetInvoiceManager.app.project;
+package timeSheetInvoiceManager.project;
 
-import com.timeSheetInvoiceManager.app.client.Client;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 

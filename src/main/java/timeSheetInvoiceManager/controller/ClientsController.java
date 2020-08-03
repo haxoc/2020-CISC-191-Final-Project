@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package timeSheetInvoiceManager;
+package timeSheetInvoiceManager.controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import timeSheetInvoiceManager.services.MainServiceCoordinator;
 
 /**
  * @author xaboo
@@ -41,8 +42,6 @@ public class ClientsController implements Initializable {
     private ClientRepository clientRepository;
     private Client client;
 
-    @FXML
-    private Label weatherLabel;
     @FXML
     private Button btnSave;
     @FXML
@@ -62,6 +61,7 @@ public class ClientsController implements Initializable {
     @Autowired
     public ClientsController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
+        MainServiceCoordinator.getInstance().setClientsController(this);
     }
 
     /**
@@ -73,13 +73,7 @@ public class ClientsController implements Initializable {
         System.out.println("Clients Controller initialized");
 
         reloadClientListView();
-    }
-
-    /**
-     * @param actionEvent
-     */
-    public void loadWeatherForecast(ActionEvent actionEvent) {
-        this.weatherLabel.setText("weatherService.getWeatherForecast()");
+        resetInputFields();
     }
 
     @FXML
@@ -97,38 +91,45 @@ public class ClientsController implements Initializable {
      */
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
-        String previousID = client.getName();
-        client.setName(this.txtName.getText());
-        client.setRate(Double.parseDouble(this.txtRate.getText()));
-        client.setAddress(this.txtAddress.getText());
+        if (client != Client.NONE) {
+            String previousID = client.getName();
+            try {
+                client.setName(this.txtName.getText());
+                //TODO: make sure that the app doesn't crash if we can't parse this double
+                client.setRate(Double.parseDouble(txtRate.getText()));
+                client.setAddress(this.txtAddress.getText());
 
-        clientRepository.save(client);
-        // Changing the name changes the ID, so we have to delete the extraneous client if the names are different
-        if(!client.getName().equals(previousID)) {
-            clientRepository.deleteById(previousID);
+                clientRepository.save(client);
+                // Changing the name changes the ID, so we have to delete the extraneous client if the names are different
+                if (!client.getName().equals(previousID)) {
+                    clientRepository.deleteById(previousID);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(e);
+                System.out.println("Rate is either empty or not a number");
+            }
+
+            //Update the projects controller whenever we save the client here
+            reloadClientListView();
+            updateProjectTabClientListView();
         }
-
-        //TODO: update the projects controller whenever we save the client here
-        reloadClientListView();
     }
 
     public void btnRemoveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
-
-        clientRepository.delete(client);
-        System.out.println("Client Removed: " + client);
+        if (client != Client.NONE) {
+            clientRepository.delete(client);
+            System.out.println("Client Removed: " + client);
+        }
 
         reloadClientListView();
-
+        resetInputFields();
+        updateProjectTabClientListView();
     }
 
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
-            Double clientRate = Double.parseDouble(this.txtRate.getText());
-            Client newClient = new Client(this.txtName.getText(), clientRate, this.txtAddress.getText());
-            System.out.println("Client Added");
-
-            clientRepository.save(newClient);
+            clientRepository.save(Client.NONE);
             System.out.println("Client saved");
 
         } catch (NumberFormatException e) {
@@ -138,7 +139,6 @@ public class ClientsController implements Initializable {
             System.out.println("Rate is empty");
             System.out.println(e);
         }
-
 
         //Show names to Contact list
         reloadClientListView();
@@ -152,13 +152,17 @@ public class ClientsController implements Initializable {
 
         String clientName = listContacts.getSelectionModel().getSelectedItem();
         System.out.println(clientName);
-        Optional<Client> selectedClient = clientRepository.findById(clientName);
-
-        if (!selectedClient.isPresent()) {
-            throw new NullPointerException("client with name: " + clientName + " doesn't exist!");
+        if (clientName != null) {
+            Optional<Client> selectedClient = clientRepository.findById(clientName);
+            if (!selectedClient.isPresent()) {
+                throw new NullPointerException("client with name: " + clientName + " doesn't exist!");
+            } else {
+                return selectedClient.get();
+            }
         } else {
-            return selectedClient.get();
+            return Client.NONE;
         }
+
     }
 
     private void reloadClientListView() {
@@ -168,6 +172,22 @@ public class ClientsController implements Initializable {
             System.out.println("Adding client to list: " + client.toString());
             clientList.add(client.getName());
         });
+    }
+
+    private void updateProjectTabClientListView() {
+        ProjectsController projectsControllerInstance = MainServiceCoordinator.getInstance().getProjectsController();
+        if (projectsControllerInstance != null) {
+            projectsControllerInstance.reloadClientList();
+        }
+    }
+
+    private void resetInputFields() {
+        txtName.setText("");
+        txtAddress.setText("");
+        txtRate.setText("");
+        txtName.setPromptText("Name");
+        txtAddress.setPromptText("");
+        txtRate.setPromptText("Hourly Rate");
     }
 
 }

@@ -1,4 +1,4 @@
-package com.timeSheetInvoiceManager.app.timesheet;
+package timeSheetInvoiceManager.timesheet;
 
 import javax.persistence.*;
 import java.time.LocalDate;

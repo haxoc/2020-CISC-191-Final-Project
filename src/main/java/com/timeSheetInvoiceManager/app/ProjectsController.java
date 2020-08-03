@@ -5,6 +5,7 @@
  */
 package com.timeSheetInvoiceManager.app;
 
+import javafx.event.ActionEvent;
 import com.timeSheetInvoiceManager.app.client.Client;
 import com.timeSheetInvoiceManager.app.client.ClientRepository;
 import com.timeSheetInvoiceManager.app.project.Project;
@@ -59,11 +60,19 @@ public class ProjectsController implements Initializable {
     @FXML
     private Button btnSave;
     @FXML
-    private TextField txtName;
+    private Button btnDelete;
     @FXML
-    private TextArea txtAddress;
+    private Button btnAdd;
     @FXML
-    private TextField txtRate;
+    private Button btnEdit;
+
+    @FXML
+    private TextField txtEmployee;
+    @FXML
+    private TextField txtDescription;
+    @FXML
+    private TextField txtDate;
+
     @FXML
     private ListView<String> listClients;
     @FXML
@@ -181,6 +190,21 @@ public class ProjectsController implements Initializable {
         });
 
         tableEntries.setItems(entryList);
+    }
+
+    @FXML
+    void btnDeleteClicked(ActionEvent event) {
+        System.out.println("Delete clicked");
+    }
+
+    @FXML
+    void btnEditClicked(ActionEvent event) {
+        System.out.println("Edit clicked");
+    }
+
+    @FXML
+    void btnAddClicked(ActionEvent event) {
+        System.out.println("Add clicked");
     }
 
     public void saveButtonClicked() {

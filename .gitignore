@@ -34,6 +34,8 @@ out/
 .vscode/
 
 *.class
+bin/main/com/timeSheetInvoiceManager/app/SpringBootActualApplication.class
+
 
 ## Database files ##
 database.log
@@ -41,4 +43,5 @@ database.properties
 database.tmp
 database.script
 database.lck
+
 

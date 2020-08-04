@@ -26,6 +26,7 @@ public class MainServiceCoordinator {
     public void setClientsController(ClientsController clientsController) {
         if (!setClientControllerOnce) {
             this.clientsController = clientsController;
+            setClientControllerOnce = true;
         } else {
             System.out.println("Tried to set clients controller twice!");
         }
@@ -38,6 +39,7 @@ public class MainServiceCoordinator {
     public void setProjectsController(ProjectsController projectsController) {
         if (!setProjectsControllerOnce) {
             this.projectsController = projectsController;
+            setProjectsControllerOnce = true;
         } else {
             System.out.println("Tried to set projects controller twice!");
         }
@@ -50,6 +52,7 @@ public class MainServiceCoordinator {
     public void setInvoicesController(InvoicesController invoicesController) {
         if(!setInvoicesControllerOnce) {
             this.invoicesController = invoicesController;
+            setInvoicesControllerOnce = true;
         } else {
             System.out.println("Tried to set projects controller twice!");
         }

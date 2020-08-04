@@ -41,7 +41,6 @@ import timeSheetInvoiceManager.services.MainServiceCoordinator;
 public class ClientsController implements Initializable {
 
     private ClientRepository clientRepository;
-    private Client client;
 
     @FXML
     private Button btnSave;
@@ -53,14 +52,14 @@ public class ClientsController implements Initializable {
     private TextField txtRate;
     @FXML
     private ListView<String> listContacts;
-    private ObservableList<String> clientList = FXCollections.observableArrayList();
+    private final ObservableList<String> clientList = FXCollections.observableArrayList();
 
 
     /**
      * @param clientRepository
      */
     @Autowired
-    public ClientsController(ClientRepository clientRepository, ProjectRepository projectRepository) {
+    public ClientsController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
         MainServiceCoordinator.getInstance().setClientsController(this);
     }
@@ -93,7 +92,7 @@ public class ClientsController implements Initializable {
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
-            Integer previousID = client.getId();
+            String previousID = client.getId();
             try {
                 client.setName(this.txtName.getText());
                 //TODO: make sure that the app doesn't crash if we can't parse this double
@@ -130,8 +129,8 @@ public class ClientsController implements Initializable {
 
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
-            Client newClient = new Client(txtName.getText(), Double.parseDouble(txtRate.getText()), txtAddress.getText());
-            clientRepository.save(newClient);
+
+            clientRepository.save(Client.NONE);
             System.out.println("Client saved");
 
         } catch (NumberFormatException e) {
@@ -151,20 +150,15 @@ public class ClientsController implements Initializable {
     }
 
     private Client getClientFromListView() {
-
         String clientName = listContacts.getSelectionModel().getSelectedItem();
         System.out.println(clientName);
         if (clientName != null) {
-            Optional<Client> selectedClient = clientRepository.findByName(clientName);
-            if (!selectedClient.isPresent()) {
-                throw new NullPointerException("client with name: " + clientName + " doesn't exist!");
-            } else {
+            Optional<Client> selectedClient = clientRepository.findById(clientName);
+            if (selectedClient.isPresent()) {
                 return selectedClient.get();
             }
-        } else {
-            return Client.NONE;
         }
-
+        return Client.NONE;
     }
 
     private void reloadClientListView() {

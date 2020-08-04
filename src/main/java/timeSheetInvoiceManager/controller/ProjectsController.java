@@ -39,6 +39,7 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+
 import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
 //import java.util.List;
 
@@ -53,13 +54,6 @@ import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
 public class ProjectsController implements Initializable {
 
     private ClientRepository clientRepository;
-    private Client client;
-    private Project project;
-    private ProjectRepository projectRepository;
-    private TimeSheet timeSheet;
-    private TimeSheetRepository timeSheetRepository;
-    private TimeSheetEntry timeSheetEntry;
-    private TimeSheetEntryRepository timeSheetEntryRepository;
 
     @FXML
     private Button btnSave;
@@ -103,10 +97,8 @@ public class ProjectsController implements Initializable {
      */
 
     @Autowired
-    public ProjectsController(ClientRepository clientRepository, TimeSheetRepository timeSheetRepository, TimeSheetEntryRepository timeSheetEntryRepository) {
+    public ProjectsController(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.timeSheetRepository = timeSheetRepository;
-        this.timeSheetEntryRepository = timeSheetEntryRepository;
         MainServiceCoordinator.getInstance().setProjectsController(this);
     }
 
@@ -158,29 +150,7 @@ public class ProjectsController implements Initializable {
             entryNameCol.setCellValueFactory(
                     new PropertyValueFactory<TimeSheetEntry, String>("employeeName")
             );
-
-            entryList = FXCollections.observableArrayList();
-            if (project != Project.NONE) {
-                //System.out.println("project = " + project);
-                //System.out.println("project.getTimeSheets() = " + project.getTimeSheets());
-                //System.out.println("we want to check projects and get timeSheets");
-                project.getTimeSheets().forEach((beginDate, timeSheet) -> {
-                    //System.out.println("beginDate= " + beginDate);
-                    //System.out.println("timeSheet= " + timeSheet);
-                    //System.out.println("timeSheet.getEntries()= " + timeSheet.getEntries());
-                    //System.out.println("we're going to get timesheets");
-                    Map<Integer, TimeSheetEntry> timeSheetEntries = timeSheet.getEntries();
-                    //System.out.println("timeSheet.getEntries()= " + timeSheet.getEntries());
-                    //System.out.println("timeSheetEntries = " + timeSheetEntries);
-
-                    timeSheetEntries.forEach((key, value) -> {
-                        //System.out.println("Key = " + key + ", Value = " + value);
-                        entryList.add(value);
-                    });
-                });
-                tableEntries.setItems(entryList);
-            }
-
+            loadEntryList(project);
         }
     }
 
@@ -197,77 +167,28 @@ public class ProjectsController implements Initializable {
     @FXML
     void btnAddClicked(ActionEvent event) {
         System.out.println("Add clicked");
-        var selectedProject = listProjects.getSelectionModel().getSelectedItem();
-        Project project = getClientFromListView().getProject(selectedProject);
-            if (project != Project.NONE) {
-                System.out.println("project = " + project);
-
-                project.getTimeSheets().forEach((beginDate, timeSheet) -> {
-                    System.out.println("timeSheet = " + timeSheet);                
-                    TimeSheetEntry timeSheetEntryForm = new TimeSheetEntry(
-                                                            dpDateChooser.getValue(), //date
-                                                            txtEmployee.getText(), //employeeName
-                                                            txtDescription.getText(), //description
-                                                            Math.round(Math.random() * 10), //time
-                                                            timeSheet, //timesheet object
-                                                            project.getId() //projectid
-                                                        );
-                    System.out.println("timeSheetEntryForm = " + timeSheetEntryForm);
-                    timeSheet.addEntry(timeSheetEntryForm);
-                    timeSheetEntryRepository.save(timeSheetEntryForm);
-                    System.out.println("timeSheetEntryRepository.saved");
-                });
-            }
-            System.out.println("btnAddClicked finished");
-    }
-                    /*
-                    if (timeSheet_linked.isPresent()) {
-                    TimeSheetEntry timeSheetEntry = new TimeSheetEntry(
-                                                                LocalDate.now(), //date
-                                                                "employee 100 name", //employeeName
-                                                                "desc: 100", //description
-                                                                Math.round(Math.random() * 10), //time
-                                                                timeSheet_linked.get(), //timesheet object
-                                                                project.getId() //projectid
-                                                            );
-                        timeSheet_linked.get().addEntry(timeSheetEntry);
-                        timeSheetEntryRepository.save(timeSheetEntry);
-/*
-                };
-            }
-        p.ifPresent((project) -> {
-            Optional<TimeSheet> timeSheet_linked = timeSheetRepository.findById(project.getId());
-            timeSheet_linked.get()
-        
-        })
-            c.ifPresent((client) -> client.getProjects().forEach((name, project) -> {
-  */
-        /*
-
-0
+        var selectedProjectName = listProjects.getSelectionModel().getSelectedItem();
+        Client selectedClient = getClientFromListView();
+        Project project = selectedClient.getProject(selectedProjectName);
+        if (project != Project.NONE) {
             System.out.println("project = " + project);
-            System.out.println("project.getTimeSheet() = " + project.getTimeSheets());
-            System.out.println("project.getTimeSheet() = " + project.getTimeSheets());
-
-            System.out.println("project.getTimeSheetId() = " + project.getTimeSheetId());
-            System.out.println("project.getId() = " + project.getId());
-
-        //TimeSheet currentTimeSheet = project.getTimeSheet();
-            //System.out.println("currentTimeSheet = " + currentTimeSheet);
-
-            //TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), this.txtEmployee.getText(), this.txtDescription.getText(), 10, currentTimeSheet, project.getId(), currentTimeSheet.getId());
-            //TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), "employee " + i + " name", "desc: " + i, Math.round(Math.random() * 10), timeSheetNew, project.getId(), timeSheetNew.getId());
-            //TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), "employee 01", "desc 01", 10, currentTimeSheet.getId(), 1);
-            //TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), "employee 01", "desc 01", 10, currentTimeSheet, 1);
-
-            //System.out.println("timeSheetEntry = " + timeSheetEntry);
-            
-            //timeSheetEntryRepository.save(timeSheetEntry);
-            //entryList.add(timeSheetEntry);
-
-        });
-        //tableEntries.setItems(entryList);
-        */
+            LocalDate entryDate = dpDateChooser.getValue();
+            TimeSheet timeSheet = project.getTimeSheet(entryDate.withDayOfMonth(1));
+            timeSheet.addEntry(
+                    new TimeSheetEntry(
+                            entryDate,
+                            txtEmployee.getText(),
+                            txtDescription.getText(),
+                            Math.round(Math.random() * 10),
+                            timeSheet,
+                            project.getId()
+                    )
+            );
+            clientRepository.save(selectedClient);
+            loadEntryList(project);
+        }
+        System.out.println("btnAddClicked finished");
+    }
 
     public void saveButtonClicked() {
         System.out.println("Save clicked");
@@ -280,12 +201,12 @@ public class ProjectsController implements Initializable {
     private Client getClientFromListView() {
         String clientName = listClients.getSelectionModel().getSelectedItem();
         System.out.println(clientName);
-        if(clientName == null) {
+        if (clientName == null) {
             return Client.NONE;
         }
 
-        Optional<Client> selectedClient = clientRepository.findByName(clientName);
-        
+        Optional<Client> selectedClient = clientRepository.findById(clientName);
+
         return selectedClient.isPresent() ? selectedClient.get() : Client.NONE;
     }
 
@@ -295,5 +216,17 @@ public class ProjectsController implements Initializable {
         clientRepository.findAll().forEach((client) -> {
             clientList.add(client.getName());
         });
+    }
+
+    private void loadEntryList(Project project) {
+        entryList = FXCollections.observableArrayList();
+        if (project != Project.NONE) {
+            project.getTimeSheets().forEach((beginDate, timeSheet) -> {
+                timeSheet.getEntries().forEach((key, value) -> {
+                    entryList.add(value);
+                });
+            });
+            tableEntries.setItems(entryList);
+        }
     }
 }

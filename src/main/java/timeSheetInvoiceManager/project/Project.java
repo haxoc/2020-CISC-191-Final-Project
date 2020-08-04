@@ -82,6 +82,9 @@ public class Project {
     }
 
     public TimeSheet getTimeSheet(LocalDate yearMonth) {
+        if (!timeSheets.containsKey(yearMonth)) {
+            timeSheets.put(yearMonth, new TimeSheet(this, yearMonth, yearMonth.plusMonths(1).minusDays(1)));
+        }
         return timeSheets.get(yearMonth);
     }
 

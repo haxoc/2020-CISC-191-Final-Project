@@ -11,10 +11,7 @@ public class Client {
     public static final Client NONE = new Client("NONE client", -1.0, "NONE address");
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-    )
-    private Integer id;
+    private String id;
 
     private String name;
     private String address;
@@ -36,7 +33,6 @@ public class Client {
 
     public Client(String name, Double hourlyRate, String address) {
         setName(name);
-        this.id = id;
         this.address = address;
         this.rate = hourlyRate;
         isActive = true;
@@ -47,7 +43,7 @@ public class Client {
     }
 
     public void setName(String name) {
-        this.id = id;
+        this.id = name;
         this.name = name;
     }
 
@@ -99,12 +95,13 @@ public class Client {
         return projects.getOrDefault(name, Project.NONE);
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    private void setId(Integer id) {
+    protected void setId(String id) {
         this.id = id;
+        this.name = id;
     }
 
     @Override

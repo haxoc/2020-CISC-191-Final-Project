@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.client.ClientRepository;
+import timeSheetInvoiceManager.project.ProjectRepository;
 
 import java.util.Optional;
 
@@ -59,7 +60,7 @@ public class ClientsController implements Initializable {
      * @param clientRepository
      */
     @Autowired
-    public ClientsController(ClientRepository clientRepository) {
+    public ClientsController(ClientRepository clientRepository, ProjectRepository projectRepository) {
         this.clientRepository = clientRepository;
         MainServiceCoordinator.getInstance().setClientsController(this);
     }

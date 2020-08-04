@@ -24,7 +24,7 @@ public class TimeSheetEntry {
     /**
      * How many hours this entry
      */
-    private double time;
+    private Double hours;
 
     @ManyToOne(
             fetch = FetchType.EAGER
@@ -38,11 +38,11 @@ public class TimeSheetEntry {
         mapId = "";
     }
 
-    public TimeSheetEntry(LocalDate date, String employeeName, String description, double time, TimeSheet timeSheet, Integer projectId) {
+    public TimeSheetEntry(LocalDate date, String employeeName, String description, Double hours, TimeSheet timeSheet, Integer projectId) {
         this.date = date;
         this.employeeName = employeeName;
         this.description = description;
-        this.time = time;
+        this.hours = hours;
         this.timeSheet = timeSheet;
         this.projectId = projectId;
         mapId = date.toString() + employeeName;
@@ -85,12 +85,12 @@ public class TimeSheetEntry {
         this.description = description;
     }
 
-    public double getTime() {
-        return time;
+    public Double getHours() {
+        return hours;
     }
 
-    public void setTime(double time) {
-        this.time = time;
+    public void setHours(Double hours) {
+        this.hours = hours;
     }
 
     public double getProjectId() {
@@ -120,7 +120,7 @@ public class TimeSheetEntry {
                 ", date=" + date +
                 ", employeeName='" + employeeName + '\'' +
                 ", description='" + description + '\'' +
-                ", time=" + time +
+                ", hours=" + hours +
                 ", projectId=" + projectId +
                 ", timeSheetId=" + timeSheet +
                 '}';

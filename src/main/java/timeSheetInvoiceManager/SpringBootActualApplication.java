@@ -98,13 +98,13 @@ public class SpringBootActualApplication {
                     //System.out.println("timeSheet_linked = " + timeSheet_linked);
                     if (timeSheet_linked.isPresent()) {
                         TimeSheetEntry timeSheetEntry = new TimeSheetEntry(
-                                                                LocalDate.now(), //date
-                                                                "employee " + i + " name", //employeeName
-                                                                "desc: " + i, //description
-                                                                Math.round(Math.random() * 10), //time
-                                                                timeSheet_linked.get(), //timesheet object
-                                                                project.getId() //projectid
-                                                            );
+                                LocalDate.now(), //date
+                                "employee " + i + " name", //employeeName
+                                "desc: " + i, //description
+                                (double) Math.round(Math.random() * 10), //time
+                                timeSheet_linked.get(), //timesheet object
+                                project.getId() //projectid
+                        );
                         timeSheet_linked.get().addEntry(timeSheetEntry);
                         timeSheetEntryRepository.save(timeSheetEntry);
                         //System.out.println("timeSheetEntry = " + timeSheetEntry);

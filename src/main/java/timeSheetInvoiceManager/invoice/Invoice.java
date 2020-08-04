@@ -40,7 +40,7 @@ public class Invoice {
         // this month, but this will make sure that we don't miss any entries
         client.getProjects().forEach((name, project) -> project.getTimeSheets().forEach((beginDate, timeSheet) -> timeSheet.getEntries().forEach((mapID, entry) -> {
                 if (entry.getDate().isAfter(beginServiceDate) || entry.getDate().isEqual(beginServiceDate)) {
-                    totalHours += entry.getTime();
+                    totalHours += entry.getHours();
                 }
             })));
         this.amount = totalHours * client.getRate();

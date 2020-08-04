@@ -56,20 +56,19 @@ public class ProjectsController implements Initializable {
     private ClientRepository clientRepository;
 
     @FXML
-    private Button btnSave;
-    @FXML
     private Button btnDelete;
     @FXML
     private Button btnAdd;
     @FXML
     private Button btnEdit;
 
+
     @FXML
     private TextField txtEmployee;
     @FXML
     private TextField txtDescription;
     @FXML
-    private TextField txtDate;
+    private TextField txtHours;
     @FXML
     private DatePicker dpDateChooser;
 
@@ -77,6 +76,7 @@ public class ProjectsController implements Initializable {
     private ListView<String> listClients;
     @FXML
     private ListView<String> listProjects;
+
     @FXML
     private TableView<TimeSheetEntry> tableEntries;
 
@@ -86,6 +86,8 @@ public class ProjectsController implements Initializable {
     TableColumn<TimeSheetEntry, String> entryDescCol;
     @FXML
     TableColumn<TimeSheetEntry, String> entryNameCol;
+    @FXML
+    TableColumn<TimeSheetEntry, Double> entryHoursCol;
 
     // The table's data
     private ObservableList<TimeSheetEntry> entryList;
@@ -150,6 +152,9 @@ public class ProjectsController implements Initializable {
             entryNameCol.setCellValueFactory(
                     new PropertyValueFactory<TimeSheetEntry, String>("employeeName")
             );
+            entryHoursCol.setCellValueFactory(
+                    new PropertyValueFactory<TimeSheetEntry, Double>("hours")
+            );
             loadEntryList(project);
         }
     }
@@ -172,30 +177,43 @@ public class ProjectsController implements Initializable {
         Project project = selectedClient.getProject(selectedProjectName);
         if (project != Project.NONE) {
             System.out.println("project = " + project);
-            LocalDate entryDate = dpDateChooser.getValue();
-            TimeSheet timeSheet = project.getTimeSheet(entryDate.withDayOfMonth(1));
-            timeSheet.addEntry(
-                    new TimeSheetEntry(
-                            entryDate,
-                            txtEmployee.getText(),
-                            txtDescription.getText(),
-                            Math.round(Math.random() * 10),
-                            timeSheet,
-                            project.getId()
-                    )
-            );
-            clientRepository.save(selectedClient);
-            loadEntryList(project);
+
+            try {
+                LocalDate entryDate = dpDateChooser.getValue();
+                try {
+                    TimeSheet timeSheet = project.getTimeSheet(entryDate.withDayOfMonth(1));
+                    timeSheet.addEntry(
+                            new TimeSheetEntry(
+                                    entryDate,
+                                    txtEmployee.getText(),
+                                    txtDescription.getText(),
+                                    Double.parseDouble(txtHours.getText()),
+                                    timeSheet,
+                                    project.getId()
+                            )
+                    );
+                    clientRepository.save(selectedClient);
+                } catch (NumberFormatException e) {
+                    System.out.println("Hours worked must be a double");
+                    System.out.println(e);
+                }
+                loadEntryList(project);
+            } catch (NullPointerException e) {
+                System.out.println("There must be a date");
+                System.out.println(e);
+            }
         }
         System.out.println("btnAddClicked finished");
     }
 
-    public void saveButtonClicked() {
-        System.out.println("Save clicked");
+    @FXML
+    public void btnAddProjectClicked(ActionEvent event) {
+
     }
 
-    public void timeEntriesClicked() {
-        System.out.println("Save clicked");
+    @FXML
+    public void btnRemoveProjectClicked(ActionEvent event) {
+
     }
 
     private Client getClientFromListView() {

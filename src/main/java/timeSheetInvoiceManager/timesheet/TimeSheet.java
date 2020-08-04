@@ -19,12 +19,13 @@ public class TimeSheet {
     private LocalDate endDate;
 
     @OneToMany(
-            mappedBy = "timeSheet",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+            mappedBy = "timeSheet",
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
-    @MapKey
-    private final Map<Integer, TimeSheetEntry> entries = new HashMap<>();
+    @MapKey(name = "mapId")
+    private final Map<String, TimeSheetEntry> entries = new HashMap<>();
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -54,10 +55,11 @@ public class TimeSheet {
 
     //TODO: maybe check that entry is in the time sheet's month
     public void addEntry(TimeSheetEntry entry) {
-        entries.put(entry.getId(), entry);
+        System.out.println(entry.getMapId());
+        entries.put(entry.getMapId(), entry);
     }
 
-    public Map<Integer, TimeSheetEntry> getEntries() {
+    public Map<String, TimeSheetEntry> getEntries() {
         return entries;
     }
 
@@ -69,7 +71,7 @@ public class TimeSheet {
         return id;
     }
 
-    public void setId(Integer id) {
+    protected void setId(Integer id) {
         this.id = id;
     }
 
@@ -77,7 +79,6 @@ public class TimeSheet {
     public String toString() {
         return "TimeSheet{" +
                 "id=" + id +
-                ", projectid='" + project.getId() + '\'' +
                 '}';
     }
 

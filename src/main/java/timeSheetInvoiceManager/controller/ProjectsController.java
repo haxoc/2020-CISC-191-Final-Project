@@ -16,6 +16,7 @@ import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
 import timeSheetInvoiceManager.timesheet.TimeSheetRepository;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -36,12 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
-import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
-//import java.util.List;
 
 /**
  * FXML Controller class
@@ -53,7 +50,7 @@ import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
 
 public class ProjectsController implements Initializable {
 
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
     @FXML
     private Button btnDelete;
@@ -91,8 +88,8 @@ public class ProjectsController implements Initializable {
 
     // The table's data
     private ObservableList<TimeSheetEntry> entryList;
-    private ObservableList<String> clientList = FXCollections.observableArrayList();
-    private ObservableList<String> projectList = FXCollections.observableArrayList();
+    private final ObservableList<String> clientList = FXCollections.observableArrayList();
+    private final ObservableList<String> projectList = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -162,6 +159,17 @@ public class ProjectsController implements Initializable {
     @FXML
     void btnDeleteClicked(ActionEvent event) {
         System.out.println("Delete clicked");
+        TimeSheetEntry selectedEntry = tableEntries.getSelectionModel().getSelectedItem();
+        if (selectedEntry != null) {
+            Client selectedClient = getClientFromListView();
+            Project selectedProject = selectedClient.getProject(listProjects.getSelectionModel().getSelectedItem());
+            System.out.println(selectedEntry);
+            System.out.println(selectedProject.getName());
+
+            selectedProject.getTimeSheet(selectedEntry.getDate().withDayOfMonth(1)).removeEntry(selectedEntry);
+            clientRepository.save(selectedClient);
+            loadEntryList(selectedProject);
+        }
     }
 
     @FXML
@@ -188,8 +196,7 @@ public class ProjectsController implements Initializable {
                                     txtEmployee.getText(),
                                     txtDescription.getText(),
                                     Double.parseDouble(txtHours.getText()),
-                                    timeSheet,
-                                    project.getId()
+                                    timeSheet
                             )
                     );
                     clientRepository.save(selectedClient);
@@ -239,9 +246,9 @@ public class ProjectsController implements Initializable {
     private void loadEntryList(Project project) {
         entryList = FXCollections.observableArrayList();
         if (project != Project.NONE) {
-            project.getTimeSheets().forEach((beginDate, timeSheet) -> {
-                timeSheet.getEntries().forEach((key, value) -> {
-                    entryList.add(value);
+            project.getTimeSheets().forEach((yearMonth, timeSheet) -> {
+                timeSheet.getEntries().forEach((mapId, entry) -> {
+                    entryList.add(entry);
                 });
             });
             tableEntries.setItems(entryList);

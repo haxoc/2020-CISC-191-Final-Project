@@ -28,7 +28,8 @@ public class Project {
     @OneToMany(
             cascade = CascadeType.ALL,
             mappedBy = "project",
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
     @MapKey(name = "beginDate")
     private Map<LocalDate, TimeSheet> timeSheets;

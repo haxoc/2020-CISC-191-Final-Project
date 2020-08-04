@@ -22,7 +22,8 @@ public class Client {
     @OneToMany(
             mappedBy = "client",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
     @MapKey(name = "name")
     private Map<String, Project> projects = new HashMap<>();
@@ -77,6 +78,10 @@ public class Client {
 
     public void addProject(Project project) {
         projects.put(project.getName(), project);
+    }
+
+    public void replaceProject(Project project) {
+        projects.replace(project.getName(), project);
     }
 
     public void removeProject(Project project) {

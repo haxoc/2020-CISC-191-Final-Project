@@ -18,7 +18,6 @@ public class TimeSheetEntry {
     private LocalDate date;
     private String employeeName;
     private String description;
-    private Integer projectId;
     private final String mapId;
 
     /**
@@ -26,33 +25,23 @@ public class TimeSheetEntry {
      */
     private Double hours;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER
-    )
-    @JoinColumn(
-            name = "timeSheet_id"
-    )
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "timeSheet_id")
     private TimeSheet timeSheet;
 
     protected TimeSheetEntry() {
         mapId = "";
     }
 
-    public TimeSheetEntry(LocalDate date, String employeeName, String description, Double hours, TimeSheet timeSheet, Integer projectId) {
+    public TimeSheetEntry(LocalDate date, String employeeName, String description, Double hours, TimeSheet timeSheet) {
         this.date = date;
         this.employeeName = employeeName;
         this.description = description;
         this.hours = hours;
         this.timeSheet = timeSheet;
-        this.projectId = projectId;
-        mapId = date.toString() + employeeName;
-        //this.id = getEntryID(projectId, employeeName, date);
+        this.mapId = date.toString() + "_" + employeeName;
     }
-/*
-    public TimeSheetEntry(LocalDate now, String string, String string0, long round, TimeSheet timeSheet) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-*/
+
     public Integer getId() {
         return id;
     }
@@ -93,14 +82,6 @@ public class TimeSheetEntry {
         this.hours = hours;
     }
 
-    public double getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
     public TimeSheet getTimeSheet() {
         return timeSheet;
     }
@@ -121,13 +102,8 @@ public class TimeSheetEntry {
                 ", employeeName='" + employeeName + '\'' +
                 ", description='" + description + '\'' +
                 ", hours=" + hours +
-                ", projectId=" + projectId +
-                ", timeSheetId=" + timeSheet +
+                ", mapID='" + mapId + '\'' +
                 '}';
     }
 
-    public Integer getEntryID() {
-        return id;
-        //return date.toString() + employeeName + "_" + projectId;
-    }
 }

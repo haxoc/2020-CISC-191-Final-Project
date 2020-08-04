@@ -24,7 +24,7 @@ public class TimeSheet {
             fetch = FetchType.EAGER
     )
     @MapKey
-    private final Map<String, TimeSheetEntry> entries = new HashMap<>();
+    private final Map<Integer, TimeSheetEntry> entries = new HashMap<>();
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -54,10 +54,10 @@ public class TimeSheet {
 
     //TODO: maybe check that entry is in the time sheet's month
     public void addEntry(TimeSheetEntry entry) {
-        entries.put(entry.getMapId(), entry);
+        entries.put(entry.getId(), entry);
     }
 
-    public Map<String, TimeSheetEntry> getEntries() {
+    public Map<Integer, TimeSheetEntry> getEntries() {
         return entries;
     }
 

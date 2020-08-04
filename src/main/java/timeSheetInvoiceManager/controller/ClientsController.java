@@ -92,7 +92,7 @@ public class ClientsController implements Initializable {
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
-            String previousID = client.getName();
+            Integer previousID = client.getId();
             try {
                 client.setName(this.txtName.getText());
                 //TODO: make sure that the app doesn't crash if we can't parse this double
@@ -154,7 +154,7 @@ public class ClientsController implements Initializable {
         String clientName = listContacts.getSelectionModel().getSelectedItem();
         System.out.println(clientName);
         if (clientName != null) {
-            Optional<Client> selectedClient = clientRepository.findById(clientName);
+            Optional<Client> selectedClient = clientRepository.findByName(clientName);
             if (!selectedClient.isPresent()) {
                 throw new NullPointerException("client with name: " + clientName + " doesn't exist!");
             } else {

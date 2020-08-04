@@ -38,45 +38,78 @@ public class SpringBootActualApplication {
     @Bean
     public CommandLineRunner demo(ClientRepository repo, ProjectRepository projectRepository, TimeSheetRepository timeSheetRepository, TimeSheetEntryRepository timeSheetEntryRepository) {
         return args -> {
+            System.out.println("Add Client 20");
             Client client1 = new Client("Client 20", 100.00, "some address");
-
             for (int i = 1; i <= 10; i++) {
+                //Create a project
                 Project project = new Project("Project-" + i, 35, client1);
-                client1.addProject(project);
-//                    System.out.println(project);
+                //System.out.println(project);
 
+                //Create time sheet for this project
+                TimeSheet timeSheetNew = new TimeSheet(project, LocalDate.now(), LocalDate.now().plusMonths(1));
+                //System.out.println("timeSheetNew = " + timeSheetNew);
+
+                project.addTimeSheet(timeSheetNew);
+                client1.addProject(project);
             }
             repo.save(client1);
+            System.out.println(client1);
+            System.out.println(client1.getProjects());
+            System.out.println(client1.getProjects());
+
+            System.out.println("Add Client 30");
             Client client3 = new Client("Client 30", 103.00, "some address 03");
             for (int i = 1; i <= 10; i++) {
+                //Create a project
                 Project project = new Project("Project-" + i, 35, client1);
-                client1.addProject(project);
-//                    System.out.println(project);
+                //System.out.println(project);
+
+                //Create time sheet for this project
+                TimeSheet timeSheetNew = new TimeSheet(project, LocalDate.now(), LocalDate.now().plusMonths(1));
+                //System.out.println("timeSheetNew = " + timeSheetNew);
+
+                project.addTimeSheet(timeSheetNew);
+                client3.addProject(project);
             }
             repo.save(client3);
+            System.out.println(client3);
+            System.out.println(client3.getProjects());
 
-            String clientId = client1.getId();
+            //Loop through client1 to set up time entries
+            Integer clientId = client1.getId();
+            System.out.println("saved client ID = " + clientId);
 
-//                System.out.println("saved client ID = " + clientId);
             Optional<Client> c = repo.findById(clientId);
 
             c.ifPresent((client) -> client.getProjects().forEach((name, project) -> {
-                //Create time sheet for this project
-                TimeSheet timeSheetNew = new TimeSheet(project, LocalDate.now(), LocalDate.now().plusMonths(1));
-//                        System.out.println("timeSheetNew = " + timeSheetNew);
-                timeSheetRepository.save(timeSheetNew);
+                System.out.println("Client 20 details below, clientId = " + clientId);
+                //System.out.println(client);
+                //System.out.println(name);
+                //System.out.println(project);
+                //System.out.println(project.getTimeSheet(LocalDate.ofYearDay(LocalDate.now().getYear(), LocalDate.now().getMonthValue()))); //this returns a null
+                //System.out.println(project.getTimeSheets());
+
+                Optional<TimeSheet> timeSheet_linked = timeSheetRepository.findById(project.getId());
+                //System.out.println(timeSheet_linked);
+
                 for (int i = 5; i <= 20; i++) {
-//                            System.out.println("i want to add time sheet entries");
-                    TimeSheetEntry timeSheetEntry = new TimeSheetEntry(LocalDate.now(), "employee " + i + " name",
-                            "desc: " + i, Math.round(Math.random() * 10),
-                            project.getTimeSheet(LocalDate.ofYearDay(LocalDate.now().getYear(),
-                                    LocalDate.now().getMonthValue())), project.getId());
-                    timeSheetNew.addEntry(timeSheetEntry);
-                    timeSheetEntryRepository.save(timeSheetEntry);
-
-//                            System.out.println("timeSheetEntry = " + timeSheetEntry);
+                    //System.out.println("i want to add time sheet entries");
+                    //TimeSheet timeSheet_linked = project.getTimeSheet(LocalDate.ofYearDay(LocalDate.now().getYear(), LocalDate.now().getMonthValue()));
+                    //System.out.println("timeSheet_linked = " + timeSheet_linked);
+                    if (timeSheet_linked.isPresent()) {
+                        TimeSheetEntry timeSheetEntry = new TimeSheetEntry(
+                                                                LocalDate.now(), //date
+                                                                "employee " + i + " name", //employeeName
+                                                                "desc: " + i, //description
+                                                                Math.round(Math.random() * 10), //time
+                                                                timeSheet_linked.get(), //timesheet object
+                                                                project.getId() //projectid
+                                                            );
+                        timeSheet_linked.get().addEntry(timeSheetEntry);
+                        timeSheetEntryRepository.save(timeSheetEntry);
+                        //System.out.println("timeSheetEntry = " + timeSheetEntry);
+                    }
                 }
-
             }));
 
             if (c.isPresent()) {
@@ -91,13 +124,16 @@ public class SpringBootActualApplication {
             System.out.println("projectRepository.findAll()");
             projectRepository.findAll().forEach(System.out::println);
 
-            System.out.println("timeSheetRepository.findById(14)");
+            System.out.println("timeSheetRepository.findById(3)");
             Optional<TimeSheet> timeSheet = timeSheetRepository.findById(3);
             timeSheet.ifPresent(System.out::println);
 
-//                System.out.println("timeSheetEntryRepository.findById(19)");
-//                Optional<TimeSheetEntry> timeSheetEntry = timeSheetEntryRepository.findById(19);
-//                System.out.println(timeSheetEntry);
+            System.out.println("timeSheetRepository.findByAll()");
+            timeSheetEntryRepository.findAll().forEach(System.out::println);
+            //timeSheet.ifPresent(System.out::println);
+            //System.out.println("timeSheetEntryRepository.findById(19)");
+            //Optional<TimeSheetEntry> timeSheetEntry = timeSheetEntryRepository.findById(19);
+            //System.out.println(timeSheetEntry);
         };
     }
 }

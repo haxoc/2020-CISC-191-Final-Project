@@ -2,13 +2,18 @@ package timeSheetInvoiceManager.timesheet;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Entity
 public class TimeSheetEntry {
 
     @Id
-    private String id;
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
+    private Integer id;
 
     private LocalDate date;
     private String employeeName;
@@ -41,14 +46,18 @@ public class TimeSheetEntry {
         this.timeSheet = timeSheet;
         this.projectId = projectId;
         mapId = date.toString() + employeeName;
-        this.id = getEntryID(projectId, employeeName, date);
+        //this.id = getEntryID(projectId, employeeName, date);
     }
-
-    public String getId() {
+/*
+    public TimeSheetEntry(LocalDate now, String string, String string0, long round, TimeSheet timeSheet) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+*/
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -113,11 +122,12 @@ public class TimeSheetEntry {
                 ", description='" + description + '\'' +
                 ", time=" + time +
                 ", projectId=" + projectId +
-                ", timeSheetId=" + id +
+                ", timeSheetId=" + timeSheet +
                 '}';
     }
 
-    public static String getEntryID(Integer projectId, String employeeName, LocalDate date) {
-        return date.toString() + employeeName + "_" + projectId;
+    public Integer getEntryID() {
+        return id;
+        //return date.toString() + employeeName + "_" + projectId;
     }
 }

@@ -46,6 +46,10 @@ public class Project {
         timeSheets = new HashMap<>();
     }
 
+    public Project(String name, Client client) {
+        this(name, client.getRate(), client);
+    }
+
     protected Project() {
     }
 

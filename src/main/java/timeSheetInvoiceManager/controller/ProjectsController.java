@@ -70,6 +70,9 @@ public class ProjectsController implements Initializable {
     private DatePicker dpDateChooser;
 
     @FXML
+    private TextField txtProjectName;
+
+    @FXML
     private ListView<String> listClients;
     @FXML
     private ListView<String> listProjects;
@@ -109,6 +112,19 @@ public class ProjectsController implements Initializable {
         ObservableList<String> projectList = FXCollections.observableArrayList("No projects");
         listProjects.setItems(projectList);
 
+        entryDateCol.setCellValueFactory(
+                new PropertyValueFactory<TimeSheetEntry, LocalDate>("date")
+        );
+        entryDescCol.setCellValueFactory(
+                new PropertyValueFactory<TimeSheetEntry, String>("description")
+        );
+        entryNameCol.setCellValueFactory(
+                new PropertyValueFactory<TimeSheetEntry, String>("employeeName")
+        );
+        entryHoursCol.setCellValueFactory(
+                new PropertyValueFactory<TimeSheetEntry, Double>("hours")
+        );
+
         reloadClientList();
         //System.out.println(projectList.toString());
     }
@@ -118,16 +134,7 @@ public class ProjectsController implements Initializable {
         System.out.println("Client list Clicked inside projects");
 
         Client client = getClientFromListView();
-        if (client != Client.NONE) {
-            System.out.println("selected client: " + client);
-
-            listProjects.getItems().clear();
-            listProjects.setItems(projectList);
-
-            client.getProjects().forEach((name, project) -> {
-                projectList.add(project.getName());
-            });
-        }
+        loadProjectList(client);
     }
 
     @FXML
@@ -140,18 +147,6 @@ public class ProjectsController implements Initializable {
         if (selectedClient != Client.NONE) {
             Project project = getClientFromListView().getProject(selectedProjectName);
 
-            entryDateCol.setCellValueFactory(
-                    new PropertyValueFactory<TimeSheetEntry, LocalDate>("date")
-            );
-            entryDescCol.setCellValueFactory(
-                    new PropertyValueFactory<TimeSheetEntry, String>("description")
-            );
-            entryNameCol.setCellValueFactory(
-                    new PropertyValueFactory<TimeSheetEntry, String>("employeeName")
-            );
-            entryHoursCol.setCellValueFactory(
-                    new PropertyValueFactory<TimeSheetEntry, Double>("hours")
-            );
             loadEntryList(project);
         }
     }
@@ -170,11 +165,6 @@ public class ProjectsController implements Initializable {
             clientRepository.save(selectedClient);
             loadEntryList(selectedProject);
         }
-    }
-
-    @FXML
-    void btnEditClicked(ActionEvent event) {
-        System.out.println("Edit clicked");
     }
 
     @FXML
@@ -215,12 +205,27 @@ public class ProjectsController implements Initializable {
 
     @FXML
     public void btnAddProjectClicked(ActionEvent event) {
-
+        //TODO: make this work, open an alert box with a prompt for the name
+        Client client = getClientFromListView();
+        String projectName = txtProjectName.getText();
+        if (client != Client.NONE && projectName != null) {
+            client.addProject(new Project(projectName, client));
+            clientRepository.save(client);
+            loadProjectList(client);
+            txtProjectName.clear();
+        }
     }
 
     @FXML
     public void btnRemoveProjectClicked(ActionEvent event) {
-
+        Client client = getClientFromListView();
+        String selectedProjectName = listProjects.getSelectionModel().getSelectedItem();
+        if(client != Client.NONE && selectedProjectName != null) {
+            client.removeProject(client.getProject(selectedProjectName));
+            clientRepository.save(client);
+            loadProjectList(client);
+            tableEntries.getItems().clear();
+        }
     }
 
     private Client getClientFromListView() {
@@ -243,6 +248,21 @@ public class ProjectsController implements Initializable {
         });
     }
 
+    private void loadProjectList(Client client) {
+        if (client != Client.NONE) {
+            System.out.println("selected client: " + client);
+
+            listProjects.getItems().clear();
+            listProjects.setItems(projectList);
+
+            client.getProjects().forEach((name, project) -> {
+                projectList.add(project.getName());
+            });
+        } else {
+            listProjects.getItems().clear();
+        }
+    }
+
     private void loadEntryList(Project project) {
         entryList = FXCollections.observableArrayList();
         if (project != Project.NONE) {
@@ -252,6 +272,15 @@ public class ProjectsController implements Initializable {
                 });
             });
             tableEntries.setItems(entryList);
+        } else {
+            tableEntries.getItems().clear();
         }
     }
+
+    private void resetEntryTextFields() {
+        txtDescription.clear();
+        txtEmployee.clear();
+        txtHours.clear();
+    }
+
 }

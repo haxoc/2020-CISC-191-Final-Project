@@ -122,6 +122,7 @@ public class ProjectsController implements Initializable {
                 new PropertyValueFactory<TimeSheetEntry, Double>("hours")
         );
 
+        entryDateCol.setSortType(TableColumn.SortType.DESCENDING);
         reloadClientList();
         //System.out.println(projectList.toString());
     }
@@ -217,7 +218,7 @@ public class ProjectsController implements Initializable {
     public void btnRemoveProjectClicked(ActionEvent event) {
         Client client = getClientFromListView();
         String selectedProjectName = listViewProjects.getSelectionModel().getSelectedItem();
-        if(client != Client.NONE && selectedProjectName != null) {
+        if (client != Client.NONE && selectedProjectName != null) {
             client.removeProject(client.getProject(selectedProjectName));
             clientRepository.save(client);
             loadProjectList(client);
@@ -269,6 +270,7 @@ public class ProjectsController implements Initializable {
                 });
             });
             tableEntries.setItems(entryList);
+            tableEntries.getSortOrder().add(entryDateCol);
         } else {
             tableEntries.getItems().clear();
         }

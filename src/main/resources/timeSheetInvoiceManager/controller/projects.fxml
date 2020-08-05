@@ -42,7 +42,7 @@
             <children>
               <TableView fx:id="tableEntries" VBox.vgrow="ALWAYS">
                 <columns>
-                  <TableColumn fx:id="entryDateCol" editable="false" maxWidth="300.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Date" />
+                  <TableColumn fx:id="entryDateCol" editable="false" maxWidth="300.0" minWidth="75.0" prefWidth="75.0" sortable="true" text="Date" />
                   <TableColumn fx:id="entryNameCol" editable="false" maxWidth="500.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Employee" />
                     <TableColumn fx:id="entryDescCol" editable="false" minWidth="300.0" prefWidth="300.0" sortable="false" text="Description" />
                     <TableColumn fx:id="entryHoursCol" editable="false" maxWidth="100.0" minWidth="50.0" prefWidth="100.0" sortable="false" text="Hours" />

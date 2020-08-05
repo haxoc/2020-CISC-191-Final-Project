@@ -35,7 +35,7 @@ out/
 
 *.class
 bin/main/com/timeSheetInvoiceManager/app/SpringBootActualApplication.class
-
+/bin/
 
 ## Database files ##
 database.log

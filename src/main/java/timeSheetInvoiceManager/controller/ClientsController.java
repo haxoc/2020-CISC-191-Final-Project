@@ -76,9 +76,17 @@ public class ClientsController implements Initializable {
         System.out.println("Client list Clicked");
         Client client = getClientFromListView();
 
-        this.txtName.setText(client.getName());
-        this.txtRate.setText(client.getRate().toString());
-        this.txtAddress.setText(client.getAddress());
+        if (client != Client.NONE) {
+            this.txtName.setText(client.getName());
+            this.txtName.setDisable(false);
+            this.txtRate.setText(client.getRate().toString());
+            this.txtRate.setDisable(false);
+            this.txtAddress.setText(client.getAddress());
+            this.txtAddress.setDisable(false);        
+        }
+        else {
+            resetInputFields();
+        }        
     }
 
     /**
@@ -102,6 +110,9 @@ public class ClientsController implements Initializable {
             //Update the projects controller whenever we save the client here
             reloadClientListView();
             updateClientListViewInOtherControllers();
+        }
+        else {
+            resetInputFields();
         }
     }
 
@@ -176,11 +187,16 @@ public class ClientsController implements Initializable {
 
     private void resetInputFields() {
         txtName.setText("");
-        txtAddress.setText("");
-        txtRate.setText("");
         txtName.setPromptText("Name");
-        txtAddress.setPromptText("");
+        txtName.setDisable(true);
+
+        txtRate.setText("");
         txtRate.setPromptText("Hourly Rate");
+        txtRate.setDisable(true);
+
+        txtAddress.setText("");
+        txtAddress.setPromptText("");
+        txtAddress.setDisable(true);
     }
 
 }

@@ -3,26 +3,22 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="800.0" minWidth="1280.0" prefHeight="800.0"
-         prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="timeSheetInvoiceManager.controller.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timeSheetInvoiceManager.controller.MainController">
     <tabs>
         <Tab fx:id="clients" closable="false" text="Clients">
             <content>
-                <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                            minWidth="-Infinity" source="clients.fxml"/>
+                <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" source="clients.fxml" />
             </content>
         </Tab>
         <Tab fx:id="projects" closable="false" text="Projects">
             <content>
-                <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                            minWidth="-Infinity" source="projects.fxml"/>
+                <fx:include maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" source="projects.fxml" />
             </content>
         </Tab>
         <Tab fx:id="invoices" closable="false" text="Invoices">
             <content>
 
-                <fx:include source="invoices.fxml"/>
+                <fx:include maxHeight="1.7976931348623157E308" source="invoices.fxml" />
 
             </content>
         </Tab>

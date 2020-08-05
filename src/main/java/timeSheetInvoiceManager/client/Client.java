@@ -16,6 +16,7 @@ public class Client {
     )
     private Integer id;
 
+    @Column(unique = true)
     private String name;
     private String address;
 

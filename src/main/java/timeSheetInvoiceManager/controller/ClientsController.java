@@ -87,7 +87,6 @@ public class ClientsController implements Initializable {
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
-            Integer previousID = client.getId();
             try {
                 client.setName(this.txtName.getText());
                 //TODO: make sure that the app doesn't crash if we can't parse this double
@@ -95,10 +94,6 @@ public class ClientsController implements Initializable {
                 client.setAddress(this.txtAddress.getText());
 
                 clientRepository.save(client);
-                // Changing the name changes the ID, so we have to delete the extraneous client if the names are different
-                if (!client.getName().equals(previousID)) {
-                    clientRepository.deleteById(previousID);
-                }
             } catch (NumberFormatException e) {
                 System.out.println(e);
                 System.out.println("Rate is either empty or not a number");
@@ -124,9 +119,10 @@ public class ClientsController implements Initializable {
 
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
-
-            clientRepository.save(Client.NONE);
-            System.out.println("Client saved");
+            if (!clientRepository.findByName("NEW CLIENT").isPresent()) {
+                clientRepository.save(new Client("NEW CLIENT", -1.0, ""));
+                System.out.println("Client saved");
+            }
 
         } catch (NumberFormatException e) {
             System.out.println("hourly rate is not a double");

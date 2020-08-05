@@ -76,7 +76,7 @@ public class SpringBootActualApplication {
             System.out.println(client3.getProjects());
 
             //Loop through client1 to set up time entries
-            String clientId = client1.getId();
+            Integer clientId = client1.getId();
             System.out.println("saved client ID = " + clientId);
 
             Optional<Client> c = repo.findById(clientId);

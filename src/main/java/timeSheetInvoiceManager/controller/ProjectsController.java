@@ -233,7 +233,7 @@ public class ProjectsController implements Initializable {
             return Client.NONE;
         }
 
-        Optional<Client> selectedClient = clientRepository.findById(clientName);
+        Optional<Client> selectedClient = clientRepository.findByName(clientName);
 
         return selectedClient.isPresent() ? selectedClient.get() : Client.NONE;
     }

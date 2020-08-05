@@ -96,6 +96,8 @@ public class SpringBootActualApplication {
                     }
                 });
                 repo.save(client);
+//                repo.deleteById(client.getId());
+//                repo.save(client);
             }));
         };
     }

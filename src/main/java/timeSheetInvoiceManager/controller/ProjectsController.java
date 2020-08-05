@@ -9,14 +9,11 @@ import javafx.event.ActionEvent;
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.client.ClientRepository;
 import timeSheetInvoiceManager.project.Project;
-import timeSheetInvoiceManager.project.ProjectRepository;
 import timeSheetInvoiceManager.services.MainServiceCoordinator;
 import timeSheetInvoiceManager.timesheet.TimeSheet;
 import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
-import timeSheetInvoiceManager.timesheet.TimeSheetRepository;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -73,9 +70,9 @@ public class ProjectsController implements Initializable {
     private TextField txtProjectName;
 
     @FXML
-    private ListView<String> listClients;
+    private ListView<String> listViewClients;
     @FXML
-    private ListView<String> listProjects;
+    private ListView<String> listViewProjects;
 
     @FXML
     private TableView<TimeSheetEntry> tableEntries;
@@ -107,10 +104,10 @@ public class ProjectsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Projects Controller initialized");
-        listClients.setItems(clientList);
+        listViewClients.setItems(clientList);
 
         ObservableList<String> projectList = FXCollections.observableArrayList("No projects");
-        listProjects.setItems(projectList);
+        listViewProjects.setItems(projectList);
 
         entryDateCol.setCellValueFactory(
                 new PropertyValueFactory<TimeSheetEntry, LocalDate>("date")
@@ -141,7 +138,7 @@ public class ProjectsController implements Initializable {
     public void projectListClicked(MouseEvent mouseEvent) {
         System.out.println("Client list Clicked inside projects");
 
-        var selectedProjectName = listProjects.getSelectionModel().getSelectedItem();
+        var selectedProjectName = listViewProjects.getSelectionModel().getSelectedItem();
         Client selectedClient = getClientFromListView();
 
         if (selectedClient != Client.NONE) {
@@ -157,7 +154,7 @@ public class ProjectsController implements Initializable {
         TimeSheetEntry selectedEntry = tableEntries.getSelectionModel().getSelectedItem();
         if (selectedEntry != null) {
             Client selectedClient = getClientFromListView();
-            Project selectedProject = selectedClient.getProject(listProjects.getSelectionModel().getSelectedItem());
+            Project selectedProject = selectedClient.getProject(listViewProjects.getSelectionModel().getSelectedItem());
             System.out.println(selectedEntry);
             System.out.println(selectedProject.getName());
 
@@ -170,7 +167,7 @@ public class ProjectsController implements Initializable {
     @FXML
     void btnAddClicked(ActionEvent event) {
         System.out.println("Add clicked");
-        var selectedProjectName = listProjects.getSelectionModel().getSelectedItem();
+        var selectedProjectName = listViewProjects.getSelectionModel().getSelectedItem();
         Client selectedClient = getClientFromListView();
         Project project = selectedClient.getProject(selectedProjectName);
         if (project != Project.NONE) {
@@ -219,7 +216,7 @@ public class ProjectsController implements Initializable {
     @FXML
     public void btnRemoveProjectClicked(ActionEvent event) {
         Client client = getClientFromListView();
-        String selectedProjectName = listProjects.getSelectionModel().getSelectedItem();
+        String selectedProjectName = listViewProjects.getSelectionModel().getSelectedItem();
         if(client != Client.NONE && selectedProjectName != null) {
             client.removeProject(client.getProject(selectedProjectName));
             clientRepository.save(client);
@@ -229,7 +226,7 @@ public class ProjectsController implements Initializable {
     }
 
     private Client getClientFromListView() {
-        String clientName = listClients.getSelectionModel().getSelectedItem();
+        String clientName = listViewClients.getSelectionModel().getSelectedItem();
         System.out.println(clientName);
         if (clientName == null) {
             return Client.NONE;
@@ -241,8 +238,8 @@ public class ProjectsController implements Initializable {
     }
 
     public void reloadClientList() {
-        listClients.getItems().clear();
-        listClients.setItems(clientList);
+        listViewClients.getItems().clear();
+        listViewClients.setItems(clientList);
         clientRepository.findAll().forEach((client) -> {
             clientList.add(client.getName());
         });
@@ -252,14 +249,14 @@ public class ProjectsController implements Initializable {
         if (client != Client.NONE) {
             System.out.println("selected client: " + client);
 
-            listProjects.getItems().clear();
-            listProjects.setItems(projectList);
+            listViewProjects.getItems().clear();
+            listViewProjects.setItems(projectList);
 
             client.getProjects().forEach((name, project) -> {
                 projectList.add(project.getName());
             });
         } else {
-            listProjects.getItems().clear();
+            listViewProjects.getItems().clear();
         }
     }
 

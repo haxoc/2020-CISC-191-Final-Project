@@ -29,8 +29,8 @@
             <RowConstraints />
         </rowConstraints>
          <children>
-        <ListView fx:id="listClients" onMouseClicked="#clientListClicked" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <ListView fx:id="listProjects" onMouseClicked="#projectListClicked" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <ListView fx:id="listViewClients" onMouseClicked="#clientListClicked" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <ListView fx:id="listViewProjects" onMouseClicked="#projectListClicked" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
         <TableView fx:id="tableEntries" prefHeight="100.0" prefWidth="377.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
             <columns>

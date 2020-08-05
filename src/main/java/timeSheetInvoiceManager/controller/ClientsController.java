@@ -6,10 +6,9 @@
 package timeSheetInvoiceManager.controller;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,9 @@ import org.springframework.stereotype.Component;
 
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.client.ClientRepository;
-import timeSheetInvoiceManager.project.ProjectRepository;
 
 import java.util.Optional;
 
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ListView;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
@@ -32,6 +27,7 @@ import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import timeSheetInvoiceManager.services.MainServiceCoordinator;
+import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
 
 /**
  * @author xaboo
@@ -53,7 +49,6 @@ public class ClientsController implements Initializable {
     @FXML
     private ListView<String> listContacts;
     private final ObservableList<String> clientList = FXCollections.observableArrayList();
-
 
     /**
      * @param clientRepository
@@ -111,7 +106,7 @@ public class ClientsController implements Initializable {
 
             //Update the projects controller whenever we save the client here
             reloadClientListView();
-            updateProjectTabClientListView();
+            updateClientListViewInOtherControllers();
         }
     }
 
@@ -124,7 +119,7 @@ public class ClientsController implements Initializable {
 
         reloadClientListView();
         resetInputFields();
-        updateProjectTabClientListView();
+        updateClientListViewInOtherControllers();
     }
 
     public void btnAddClicked(ActionEvent actionEvent) {
@@ -170,11 +165,17 @@ public class ClientsController implements Initializable {
         });
     }
 
-    private void updateProjectTabClientListView() {
+    private void updateClientListViewInOtherControllers() {
         ProjectsController projectsControllerInstance = MainServiceCoordinator.getInstance().getProjectsController();
         if (projectsControllerInstance != null) {
             projectsControllerInstance.reloadClientList();
         }
+
+        InvoicesController invoicesControllerInstance = MainServiceCoordinator.getInstance().getInvoicesController();
+        if (invoicesControllerInstance != null) {
+            invoicesControllerInstance.reloadClientList();
+        }
+
     }
 
     private void resetInputFields() {

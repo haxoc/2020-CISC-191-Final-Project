@@ -19,7 +19,7 @@
          <items>
             <SplitPane dividerPositions="0.5">
                <items>
-                  <ListView fx:id="listClients" onMouseClicked="#clientListClicked" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="listViewClients" onMouseClicked="#clientListClicked" prefHeight="200.0" prefWidth="200.0" />
                   <VBox>
                      <children>
                         <HBox spacing="10.0">
@@ -33,7 +33,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <ListView fx:id="listProjects" onMouseClicked="#projectListClicked" />
+                        <ListView fx:id="listViewProjects" onMouseClicked="#projectListClicked" />
                      </children>
                   </VBox>
                </items>

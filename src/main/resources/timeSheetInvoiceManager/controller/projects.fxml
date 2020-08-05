@@ -31,10 +31,10 @@
             <children>
               <TableView fx:id="tableEntries" VBox.vgrow="ALWAYS">
                 <columns>
-                  <TableColumn fx:id="entryDateCol" editable="false" maxWidth="300.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Date" />
-                  <TableColumn fx:id="entryNameCol" editable="false" maxWidth="500.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Employee" />
+                    <TableColumn fx:id="entryDateCol" editable="false" maxWidth="300.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Date" />
+                    <TableColumn fx:id="entryNameCol" editable="false" maxWidth="500.0" minWidth="75.0" prefWidth="75.0" sortable="false" text="Employee" />
                     <TableColumn fx:id="entryDescCol" editable="false" minWidth="300.0" prefWidth="300.0" sortable="false" text="Description" />
-                    <TableColumn editable="false" maxWidth="100.0" minWidth="50.0" prefWidth="100.0" sortable="false" text="Hours" />
+                    <TableColumn fx:id="entryTimeCol" editable="false" maxWidth="100.0" minWidth="50.0" prefWidth="100.0" sortable="false" text="Hours" />
                 </columns>
                   <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -48,10 +48,12 @@
                         <DatePicker fx:id="dpDateChooser" />
                         <TextField fx:id="txtEmployee" promptText="Employee" />
                         <TextField fx:id="txtDescription" promptText="Description" />
+                        <TextField fx:id="txtTime" promptText="Hours" />
                     <Region HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteClicked" text="Delete" />
-                    <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#btnEditClicked" text="Edit" />
-                    <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddClicked" text="Add" />
+                        <Button fx:id="btnRefresh" mnemonicParsing="false" onAction="#btnRefreshClicked" text="Refresh" />
+                        <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#btnDeleteClicked" text="Delete" />
+                        <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#btnEditClicked" text="Edit" />
+                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#btnAddClicked" text="Add" />
                   </children>
                   <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timeSheetInvoiceManager.controller.ClientsController">
+<TitledPane animated="false" collapsible="false" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timeSheetInvoiceManager.controller.ClientsController">
    <content>
       <HBox>
          <children>
@@ -38,6 +38,7 @@
                   <Region layoutX="20.0" layoutY="320.0" VBox.vgrow="ALWAYS" />
                   <TextField id="txtName" fx:id="txtName" promptText="Name" />
                   <TextField id="txtRate" fx:id="txtRate" layoutX="10.0" layoutY="10.0" promptText="Hourly Rate" />
+                  <TextField id="txtProject" fx:id="txtProject" layoutX="10.0" layoutY="10.0" promptText="Project Name" />
                   <Region layoutX="20.0" layoutY="20.0" VBox.vgrow="ALWAYS" />
                   <VBox>
                      <children>

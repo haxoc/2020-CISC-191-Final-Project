@@ -27,11 +27,15 @@ import javafx.scene.control.ListView;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
+import timeSheetInvoiceManager.project.Project;
 import timeSheetInvoiceManager.services.MainServiceCoordinator;
+import timeSheetInvoiceManager.timesheet.TimeSheet;
 
 /**
  * @author xaboo
@@ -42,11 +46,14 @@ public class ClientsController implements Initializable {
 
     private ClientRepository clientRepository;
     private Client client;
-
+    private ProjectRepository projectRepository;
+    
     @FXML
     private Button btnSave;
     @FXML
     private TextField txtName;
+    @FXML
+    private TextField txtProject;
     @FXML
     private TextArea txtAddress;
     @FXML
@@ -62,6 +69,7 @@ public class ClientsController implements Initializable {
     @Autowired
     public ClientsController(ClientRepository clientRepository, ProjectRepository projectRepository) {
         this.clientRepository = clientRepository;
+        this.projectRepository  = projectRepository;
         MainServiceCoordinator.getInstance().setClientsController(this);
     }
 
@@ -82,14 +90,26 @@ public class ClientsController implements Initializable {
         System.out.println("Client list Clicked");
         Client client = getClientFromListView();
 
-        this.txtName.setText(client.getName());
-        this.txtRate.setText(client.getRate().toString());
-        this.txtAddress.setText(client.getAddress());
+        if (client != Client.NONE) {
+            Map<String, Project> thisProject = client.getProjects();
+            thisProject.forEach((key, value) -> {
+                //System.out.println("Key = " + key + ", Value = " + value);
+                this.txtProject.setText(value.getName());
+            });
+            
+            this.txtName.setText(client.getName());
+            this.txtRate.setText(client.getRate().toString());
+            this.txtAddress.setText(client.getAddress());
+        }
+        else {
+            resetInputFields();
+        }
     }
 
     /**
      * @param actionEvent
      */
+    @FXML
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
@@ -99,7 +119,19 @@ public class ClientsController implements Initializable {
                 //TODO: make sure that the app doesn't crash if we can't parse this double
                 client.setRate(Double.parseDouble(txtRate.getText()));
                 client.setAddress(this.txtAddress.getText());
+                //Add project if name is different
+                if(client.getProject(txtProject.getText()).getName() != txtProject.getText()) {
+                    Project project = new Project(txtProject.getText(), Double.parseDouble(txtRate.getText()), client);
+                    //System.out.println(project);
 
+                    //Create time sheet for this project
+                    TimeSheet timeSheetNew = new TimeSheet(project, LocalDate.now(), LocalDate.now().plusMonths(1));
+                    //System.out.println("timeSheetNew = " + timeSheetNew);
+
+                    project.addTimeSheet(timeSheetNew);
+                    client.addProject(project);                
+                }
+                
                 clientRepository.save(client);
                 // Changing the name changes the ID, so we have to delete the extraneous client if the names are different
                 if (!client.getName().equals(previousID)) {
@@ -116,6 +148,7 @@ public class ClientsController implements Initializable {
         }
     }
 
+    @FXML
     public void btnRemoveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
@@ -128,9 +161,20 @@ public class ClientsController implements Initializable {
         updateProjectTabClientListView();
     }
 
+    @FXML
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
             Client newClient = new Client(txtName.getText(), Double.parseDouble(txtRate.getText()), txtAddress.getText());
+            Project project = new Project(txtProject.getText(), Double.parseDouble(txtRate.getText()), newClient);
+            //System.out.println(project);
+
+            //Create time sheet for this project
+            TimeSheet timeSheetNew = new TimeSheet(project, LocalDate.now(), LocalDate.now().plusMonths(1));
+            //System.out.println("timeSheetNew = " + timeSheetNew);
+
+            project.addTimeSheet(timeSheetNew);
+            newClient.addProject(project);
+
             clientRepository.save(newClient);
             System.out.println("Client saved");
 
@@ -185,11 +229,16 @@ public class ClientsController implements Initializable {
 
     private void resetInputFields() {
         txtName.setText("");
-        txtAddress.setText("");
-        txtRate.setText("");
         txtName.setPromptText("Name");
-        txtAddress.setPromptText("");
+
+        txtRate.setText("");
         txtRate.setPromptText("Hourly Rate");
+
+        txtProject.setText("");
+        txtProject.setPromptText("Project Name");
+
+        txtAddress.setText("");
+        txtAddress.setPromptText("");
     }
 
 }

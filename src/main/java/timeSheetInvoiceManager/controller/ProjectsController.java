@@ -39,6 +39,7 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.stereotype.Controller;
 import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
 //import java.util.List;
 
@@ -69,6 +70,8 @@ public class ProjectsController implements Initializable {
     private Button btnAdd;
     @FXML
     private Button btnEdit;
+    @FXML
+    private Button btnRefresh;
 
     @FXML
     private TextField txtEmployee;
@@ -76,6 +79,8 @@ public class ProjectsController implements Initializable {
     private TextField txtDescription;
     @FXML
     private TextField txtDate;
+    @FXML
+    private TextField txtTime;
     @FXML
     private DatePicker dpDateChooser;
 
@@ -92,9 +97,11 @@ public class ProjectsController implements Initializable {
     TableColumn<TimeSheetEntry, String> entryDescCol;
     @FXML
     TableColumn<TimeSheetEntry, String> entryNameCol;
+    @FXML
+    TableColumn<TimeSheetEntry, Double> entryTimeCol;
 
     // The table's data
-    private ObservableList<TimeSheetEntry> entryList;
+    private ObservableList<TimeSheetEntry> entryList = FXCollections.observableArrayList();
     private ObservableList<String> clientList = FXCollections.observableArrayList();
     private ObservableList<String> projectList = FXCollections.observableArrayList();
 
@@ -108,6 +115,7 @@ public class ProjectsController implements Initializable {
         this.timeSheetRepository = timeSheetRepository;
         this.timeSheetEntryRepository = timeSheetEntryRepository;
         MainServiceCoordinator.getInstance().setProjectsController(this);
+        MainServiceCoordinator.getInstance().getClientsController();
     }
 
     @Override
@@ -127,6 +135,8 @@ public class ProjectsController implements Initializable {
         System.out.println("Client list Clicked inside projects");
 
         Client client = getClientFromListView();
+        entryList.clear();
+
         if (client != Client.NONE) {
             System.out.println("selected client: " + client);
 
@@ -158,6 +168,9 @@ public class ProjectsController implements Initializable {
             entryNameCol.setCellValueFactory(
                     new PropertyValueFactory<TimeSheetEntry, String>("employeeName")
             );
+            entryTimeCol.setCellValueFactory(
+                    new PropertyValueFactory<TimeSheetEntry, Double>("time")
+            );
 
             entryList = FXCollections.observableArrayList();
             if (project != Project.NONE) {
@@ -187,7 +200,13 @@ public class ProjectsController implements Initializable {
     @FXML
     void btnDeleteClicked(ActionEvent event) {
         System.out.println("Delete clicked");
-    }
+     }
+
+    @FXML
+    void btnRefreshClicked(ActionEvent event) {
+        System.out.println("I am going to refresh");
+        reloadClientList();
+     }
 
     @FXML
     void btnEditClicked(ActionEvent event) {
@@ -208,7 +227,7 @@ public class ProjectsController implements Initializable {
                                                             dpDateChooser.getValue(), //date
                                                             txtEmployee.getText(), //employeeName
                                                             txtDescription.getText(), //description
-                                                            Math.round(Math.random() * 10), //time
+                                                            Double.parseDouble(txtTime.getText()), //time
                                                             timeSheet, //timesheet object
                                                             project.getId() //projectid
                                                         );

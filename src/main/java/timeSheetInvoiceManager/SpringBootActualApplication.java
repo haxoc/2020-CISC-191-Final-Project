@@ -18,6 +18,8 @@ import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
 import timeSheetInvoiceManager.timesheet.TimeSheetEntryRepository;
 import timeSheetInvoiceManager.timesheet.TimeSheet;
 import timeSheetInvoiceManager.timesheet.TimeSheetRepository;
+import timeSheetInvoiceManager.invoice.Invoice;
+import timeSheetInvoiceManager.invoice.InvoiceRepository;
 
 import java.util.Optional;
 import java.time.LocalDate;
@@ -36,7 +38,7 @@ public class SpringBootActualApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(ClientRepository repo) {
+    public CommandLineRunner demo(ClientRepository repo, InvoiceRepository invoiceRepository) {
         return args -> {
             System.out.println("Add Client 20");
             Client client1 = new Client("Client 20", 100.00, "some address");
@@ -96,8 +98,13 @@ public class SpringBootActualApplication {
                     }
                 });
                 repo.save(client);
-//                repo.deleteById(client.getId());
-//                repo.save(client);
+
+                //Get list of entries for client1, project1
+                Invoice invoiceNew = new Invoice(Long.parseLong("123457890"), client, LocalDate.now(), LocalDate.now().plusDays(30), LocalDate.now().plusDays(30), "description");
+                invoiceRepository.save(invoiceNew);
+
+                //repo.deleteById(client.getId());
+                //repo.save(client);
             }));
         };
     }

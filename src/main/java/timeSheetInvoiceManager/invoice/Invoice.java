@@ -1,5 +1,6 @@
 package timeSheetInvoiceManager.invoice;
 
+import java.sql.Timestamp;
 import timeSheetInvoiceManager.client.Client;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Invoice {
+    public static final Invoice NONE = new Invoice(new Timestamp(System.currentTimeMillis()).getTime(), Client.NONE, LocalDate.now(), LocalDate.now(), LocalDate.now(), "new invoice");
 
     @Id
     /*
@@ -61,27 +63,68 @@ public class Invoice {
         return clientName;
     }
 
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
     public LocalDate getBeginServiceDate() {
         return beginServiceDate;
+    }
+
+    public void setBeginServiceDate(LocalDate beginServiceDate) {
+        this.beginServiceDate = beginServiceDate;
     }
 
     public LocalDate getEndServiceDate() {
         return endServiceDate;
     }
 
+    public void setEndServiceDate(LocalDate endServiceDate) {
+        this.endServiceDate = endServiceDate;
+    }
+
     public LocalDate getInvoiceDate() {
         return invoiceDate;
+    }
+
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     public double getAmount() {
         return amount;
     }
 
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public double getTotalHours() {
         return totalHours;
     }
 
+    public void setTotalHours(double totalHours) {
+        this.totalHours = totalHours;
+    }
+    
     public String getDescription() {
         return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "invoiceNumber=" + invoiceNumber+
+                ", clientName='" + clientName + '\'' +
+                ", beginServiceDate=" + beginServiceDate +
+                ", endServiceDate=" + endServiceDate +
+                ", invoiceDate=" + invoiceDate +
+                ", description=" + description +
+                ", totalHours=" + totalHours +
+                ", amount=" + amount +
+                '}';
     }
 }

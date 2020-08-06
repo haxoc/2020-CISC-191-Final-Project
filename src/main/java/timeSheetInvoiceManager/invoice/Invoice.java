@@ -98,12 +98,25 @@ public class Invoice {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+    public void updateAmount(Client client) {
+        this.amount = client.getRate() * this.totalHours;
+    }
 
     public double getTotalHours() {
         return totalHours;
     }
 
     public void setTotalHours(double totalHours) {
+        this.totalHours = totalHours;
+    }
+
+    public void updateTotalHours(Client client, LocalDate beginServiceDate, LocalDate endServiceDate) {
+        client.getProjects().forEach((name, project) -> project.getTimeSheets().forEach((beginDate, timeSheet) -> timeSheet.getEntries().forEach((mapID, entry) -> {
+                if (entry.getDate().isAfter(beginServiceDate) || entry.getDate().isEqual(endServiceDate)) {
+                    totalHours += entry.getHours();
+                }
+            })));
+
         this.totalHours = totalHours;
     }
     

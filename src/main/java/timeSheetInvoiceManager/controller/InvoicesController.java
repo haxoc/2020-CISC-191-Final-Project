@@ -209,20 +209,24 @@ public class InvoicesController implements Initializable {
     public void btnSaveClicked(ActionEvent event) {
         System.out.println("btnSaveClicked");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
+        Client selectedClient = clientRepository.findByName(clientChooser.getValue()).get() ;
 
         selectedInvoice.setInvoiceDate(invoiceDatePicker.getValue());
         selectedInvoice.setBeginServiceDate(beginDatePicker.getValue());
         selectedInvoice.setEndServiceDate(endDatePicker.getValue());
         selectedInvoice.setDescription(txtServiceDesc.getText());
-        /*
-        lblInvoiceNum.setText(Long.toString(selectedInvoice.getInvoiceNumber()));
-        lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
-        lblRate.setText(Double.toString(clientRepository.findByName(selectedInvoice.getClientName()).get().getRate()));
-        lblAmount.setText(Double.toString(selectedInvoice.getAmount()));
-        */
+        
+        //update hours
+        selectedInvoice.updateTotalHours(selectedClient, beginDatePicker.getValue(), endDatePicker.getValue());
+        selectedInvoice.updateAmount(selectedClient);
 
         invoiceRepository.save(selectedInvoice);
         loadInvoicesList();
+
+        //update form with new values
+        lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
+        lblAmount.setText(Double.toString(selectedInvoice.getAmount()));
+        
         System.out.println("btnSaveClicked - finished");
     }
 

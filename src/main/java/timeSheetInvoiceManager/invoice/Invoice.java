@@ -8,7 +8,8 @@ import java.time.LocalDate;
 
 @Entity
 public class Invoice {
-    public static final Invoice NONE = new Invoice(new Timestamp(System.currentTimeMillis()).getTime(), Client.NONE, LocalDate.now(), LocalDate.now(), LocalDate.now(), "new invoice");
+    public static final Invoice NONE = new Invoice(-1L,
+            Client.NONE, LocalDate.now(), LocalDate.now(), LocalDate.now(), "new invoice");
 
     @Id
     /*

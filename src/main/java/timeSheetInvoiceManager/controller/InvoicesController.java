@@ -7,6 +7,7 @@ package timeSheetInvoiceManager.controller;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,6 +35,7 @@ public class InvoicesController implements Initializable {
 
     private final ClientRepository clientRepository;
     private final InvoiceRepository invoiceRepository;
+    private static final DecimalFormat twoDecimals = new DecimalFormat("0.00");
     private Invoice invoice;
     @FXML
     private Label lblInvoiceNum;
@@ -70,7 +72,7 @@ public class InvoicesController implements Initializable {
 
     @FXML
     private Button btnRemoveInvoice;
-    
+
     @FXML
     private Button btnGenerateInvoice;
 
@@ -159,38 +161,50 @@ public class InvoicesController implements Initializable {
         //System.out.println(invoicesTableView);
 
         //Set information to forms
-        lblInvoiceNum. setText(Long.toString(selectedInvoice.getInvoiceNumber()));
-        lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
-        lblRate.setText(Double.toString(clientRepository.findByName(selectedInvoice.getClientName()).get().getRate()));
-        lblAmount.setText(Double.toString(selectedInvoice.getAmount()));
-        invoiceDatePicker.setValue(selectedInvoice.getInvoiceDate());
-        beginDatePicker.setValue(selectedInvoice.getBeginServiceDate());
-        endDatePicker.setValue(selectedInvoice.getEndServiceDate());
-        clientChooser.setValue(selectedInvoice.getClientName());
-        clientChooser.setDisable(true);
-        txtServiceDesc.setText(selectedInvoice.getDescription());
+        if (selectedInvoice != null) {
+            lblInvoiceNum.setText(Long.toString(selectedInvoice.getInvoiceNumber()));
+            lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
+            lblRate.setText(Double.toString(clientRepository.findByName(selectedInvoice.getClientName()).get().getRate()));
+            lblAmount.setText(twoDecimals.format(selectedInvoice.getAmount()));
+            invoiceDatePicker.setValue(selectedInvoice.getInvoiceDate());
+            beginDatePicker.setValue(selectedInvoice.getBeginServiceDate());
+            endDatePicker.setValue(selectedInvoice.getEndServiceDate());
+            clientChooser.setValue(selectedInvoice.getClientName());
+            clientChooser.setDisable(true);
+            txtServiceDesc.setText(selectedInvoice.getDescription());
 
-        btnGenerateInvoice.setDisable(true);
-        btnRemoveInvoice.setDisable(false);
-        btnSaveInvoice.setDisable(false);
+            btnGenerateInvoice.setDisable(true);
+            btnRemoveInvoice.setDisable(false);
+            btnSaveInvoice.setDisable(false);
 
-        System.out.println(selectedInvoice);
+            System.out.println(selectedInvoice);
+        } else {
+            btnGenerateInvoice.setDisable(false);
+            btnRemoveInvoice.setDisable(true);
+            btnSaveInvoice.setDisable(true);
+        }
     }
 
     @FXML
     public void btnGenerateInvoiceClicked(ActionEvent event) {
         System.out.println("btnGenerateInvoiceClicked");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Client selectedClient = clientRepository.findByName(clientChooser.getValue()).get() ;
-        
-        Invoice invoiceNew = new Invoice(timestamp.getTime(), selectedClient, beginDatePicker.getValue(), endDatePicker.getValue(), invoiceDatePicker.getValue(), txtServiceDesc.getText());
-        invoiceRepository.save(invoiceNew);
 
-        btnGenerateInvoice.setDisable(false);
-        btnRemoveInvoice.setDisable(true);
-        btnSaveInvoice.setDisable(true);
+        String selectedClientName = clientChooser.getValue();
+        if (selectedClientName != null) {
+            Client selectedClient = clientRepository.findByName(selectedClientName).get();
 
-        loadInvoicesList();
+            Invoice invoiceNew = new Invoice(timestamp.getTime(), selectedClient, beginDatePicker.getValue(),
+                    endDatePicker.getValue(), invoiceDatePicker.getValue(), txtServiceDesc.getText());
+            invoiceRepository.save(invoiceNew);
+
+            btnGenerateInvoice.setDisable(false);
+            btnRemoveInvoice.setDisable(true);
+            btnSaveInvoice.setDisable(true);
+
+            loadInvoicesList();
+        }
+
 
         System.out.println("btnGenerateInvoiceClicked - finished");
     }
@@ -199,34 +213,55 @@ public class InvoicesController implements Initializable {
     public void btnRemoveInvoice(ActionEvent event) {
         System.out.println("btnRemoveInvoice");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
-        invoiceRepository.delete(selectedInvoice);
+        if (selectedInvoice != null) {
+            invoiceRepository.delete(selectedInvoice);
+        } else {
+            btnGenerateInvoice.setDisable(false);
+            btnRemoveInvoice.setDisable(true);
+            btnSaveInvoice.setDisable(true);
+        }
 
         resetEntryTextFields();
         loadInvoicesList();
+
+        if (invoicesTableView.getSelectionModel().getSelectedItem() == null) {
+            btnGenerateInvoice.setDisable(false);
+            btnRemoveInvoice.setDisable(true);
+            btnSaveInvoice.setDisable(true);
+            resetEntryTextFields();
+            loadInvoicesList();
+        }
     }
 
     @FXML
     public void btnSaveClicked(ActionEvent event) {
         System.out.println("btnSaveClicked");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
-        Client selectedClient = clientRepository.findByName(clientChooser.getValue()).get() ;
+        if (selectedInvoice != null) {
+            String selectedClientName = clientChooser.getValue();
+            LocalDate invoiceDate = invoiceDatePicker.getValue();
+            LocalDate beginDate = beginDatePicker.getValue();
+            LocalDate endDate = endDatePicker.getValue();
+            String description = txtServiceDesc.getText();
 
-        selectedInvoice.setInvoiceDate(invoiceDatePicker.getValue());
-        selectedInvoice.setBeginServiceDate(beginDatePicker.getValue());
-        selectedInvoice.setEndServiceDate(endDatePicker.getValue());
-        selectedInvoice.setDescription(txtServiceDesc.getText());
-        
-        //update hours
-        selectedInvoice.updateTotalHours(selectedClient, beginDatePicker.getValue(), endDatePicker.getValue());
-        selectedInvoice.updateAmount(selectedClient);
+            if (selectedClientName != null && invoiceDate != null && beginDate != null && endDate != null) {
+                Optional<Client> optSelectedClient = clientRepository.findByName(selectedClientName);
 
-        invoiceRepository.save(selectedInvoice);
+                if (optSelectedClient.isPresent()) {
+                    Client selectedClient = optSelectedClient.get();
+                    selectedInvoice.updateTotalHours(selectedClient, beginDatePicker.getValue(), endDatePicker.getValue());
+                    selectedInvoice.updateAmount(selectedClient);
+                    selectedInvoice.setInvoiceDate(invoiceDate);
+                    invoiceRepository.save(selectedInvoice);
+                }
+            }
+        }
         loadInvoicesList();
 
         //update form with new values
         lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
-        lblAmount.setText(Double.toString(selectedInvoice.getAmount()));
-        
+        lblAmount.setText(twoDecimals.format(selectedInvoice.getAmount()));
+
         System.out.println("btnSaveClicked - finished");
     }
 
@@ -246,7 +281,7 @@ public class InvoicesController implements Initializable {
         allInvoice.forEach((invoice) -> {
             invoiceList.add(invoice);
         });
-        
+
         invoicesTableView.setItems(invoiceList);
     }
 

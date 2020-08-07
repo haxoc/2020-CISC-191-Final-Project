@@ -7,6 +7,12 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A timesheet has multiple entries and one project owner. the begin date should probably be the 1st of the month and
+ * the end date the last day of the month. Currently just an extraneous abstraction, but will be used in case the
+ * projects tab will be entries by month first instead of by projects.
+ * @author haxoc, chesteraustin
+ */
 @Entity
 public class TimeSheet {
     @Id

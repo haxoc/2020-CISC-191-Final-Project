@@ -6,7 +6,12 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a client in the database, clients have projects and rates, those rates affect the generated invoices
+ * @author haxoc, chesteraustin
+ */
 @Entity
+@SuppressWarnings("unused")
 public class Client {
     public static final Client NONE = new Client("NONE client", -1.0, "NONE address");
 

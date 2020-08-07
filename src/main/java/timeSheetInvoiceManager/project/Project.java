@@ -1,15 +1,18 @@
 package timeSheetInvoiceManager.project;
 
-
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.timesheet.TimeSheet;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A project has multiple timesheets (one for each month) and belongs to a single client, basically a sane way of grouping
+ * timesheet entries
+ * @author haxoc, chester austin
+ */
 @Entity
 public class Project {
     public static final Project NONE = new Project("NONE", -1, Client.NONE);

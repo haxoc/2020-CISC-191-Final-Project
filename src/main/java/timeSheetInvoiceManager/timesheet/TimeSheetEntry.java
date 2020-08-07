@@ -3,7 +3,9 @@ package timeSheetInvoiceManager.timesheet;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-
+/**
+ * An entry holds the employee name, the date and how many hours they worked, this is used to calculate the invoice amount
+ */
 @Entity
 @SuppressWarnings("unused")
 public class TimeSheetEntry {

@@ -10,6 +10,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import timeSheetInvoiceManager.controller.MainController;
 
+/**
+ * The main JavaFX application
+ * @author chesteraustin
+ */
 public class App extends Application {
 
     private ConfigurableApplicationContext applicationContext;
@@ -38,5 +42,4 @@ public class App extends Application {
         this.applicationContext.close();
         Platform.exit();
     }
-
 }

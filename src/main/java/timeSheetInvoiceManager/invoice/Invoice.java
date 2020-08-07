@@ -5,6 +5,11 @@ import timeSheetInvoiceManager.client.Client;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Represents an invoice, takes in all the entries between the start and end date and adds them up multiply by the client's
+ * rate
+ * @author haxoc, chesteraustin
+ */
 @Entity
 public class Invoice {
     @SuppressWarnings("unused")

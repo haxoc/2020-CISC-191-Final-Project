@@ -2,11 +2,10 @@ package timeSheetInvoiceManager.timesheet;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Entity
+@SuppressWarnings("unused")
 public class TimeSheetEntry {
 
     @Id

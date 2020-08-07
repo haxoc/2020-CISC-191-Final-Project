@@ -1,6 +1,5 @@
 package timeSheetInvoiceManager.invoice;
 
-import java.sql.Timestamp;
 import timeSheetInvoiceManager.client.Client;
 
 import javax.persistence.*;
@@ -8,6 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Invoice {
+    @SuppressWarnings("unused")
     public static final Invoice NONE = new Invoice(-1L,
             Client.NONE, LocalDate.now(), LocalDate.now(), LocalDate.now(), "new invoice");
 
@@ -56,6 +56,7 @@ public class Invoice {
         return invoiceNumber;
     }
 
+    @SuppressWarnings("unused")
     protected void setInvoiceNumber(Long invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
@@ -64,6 +65,7 @@ public class Invoice {
         return clientName;
     }
 
+    @SuppressWarnings("unused")
     public void setClientName(String clientName) {
         this.clientName = clientName;
     }
@@ -96,9 +98,7 @@ public class Invoice {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+
     public void updateAmount(Client client) {
         this.amount = client.getRate() * this.totalHours;
     }
@@ -107,18 +107,15 @@ public class Invoice {
         return totalHours;
     }
 
-    public void setTotalHours(double totalHours) {
-        this.totalHours = totalHours;
-    }
-
     public void updateTotalHours(Client client, LocalDate beginServiceDate, LocalDate endServiceDate) {
+        this.totalHours = 0;
         client.getProjects().forEach((name, project) -> project.getTimeSheets().forEach((beginDate, timeSheet) -> timeSheet.getEntries().forEach((mapID, entry) -> {
                 if (entry.getDate().isAfter(beginServiceDate) || entry.getDate().isEqual(endServiceDate)) {
-                    totalHours += entry.getHours();
+                    this.totalHours += entry.getHours();
                 }
             })));
-
-        this.totalHours = totalHours;
+        setBeginServiceDate(beginServiceDate);
+        setEndServiceDate(endServiceDate);
     }
     
     public String getDescription() {

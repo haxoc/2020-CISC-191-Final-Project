@@ -5,13 +5,6 @@
  */
 package timeSheetInvoiceManager.controller;
 
-import java.net.URL;
-import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,6 +22,19 @@ import timeSheetInvoiceManager.invoice.Invoice;
 import timeSheetInvoiceManager.invoice.InvoiceRepository;
 import timeSheetInvoiceManager.services.MainServiceCoordinator;
 
+import java.net.URL;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+/**
+ * This class controls the invoices tab of the UI, it lets the user add and remove and customize invoices. The invoice
+ * amount is auto generated based on the project and the dates the invoice encompasses.
+ *
+ * @author haxoc, chesteraustin
+ */
 @Component
 @FxmlView("invoices.fxml")
 public class InvoicesController implements Initializable {
@@ -36,7 +42,7 @@ public class InvoicesController implements Initializable {
     private final ClientRepository clientRepository;
     private final InvoiceRepository invoiceRepository;
     private static final DecimalFormat twoDecimals = new DecimalFormat("0.00");
-    private Invoice invoice;
+
     @FXML
     private Label lblInvoiceNum;
 
@@ -92,7 +98,7 @@ public class InvoicesController implements Initializable {
     private ObservableList<Invoice> invoiceList = FXCollections.observableArrayList();
 
     /**
-     * @param clientRepository
+     * @param clientRepository autowired
      */
     @Autowired
     public InvoicesController(ClientRepository clientRepository, InvoiceRepository invoiceRepository) {
@@ -106,19 +112,17 @@ public class InvoicesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Invoice View Controller initialized");
-
         invoiceNumCol.setCellValueFactory(
-                new PropertyValueFactory<Invoice, Long>("invoiceNumber")
+                new PropertyValueFactory<>("invoiceNumber")
         );
         invoiceClientNameCol.setCellValueFactory(
-                new PropertyValueFactory<Invoice, String>("clientName")
+                new PropertyValueFactory<>("clientName")
         );
         invoiceDateCol.setCellValueFactory(
-                new PropertyValueFactory<Invoice, LocalDate>("invoiceDate")
+                new PropertyValueFactory<>("invoiceDate")
         );
         invoiceAmountCol.setCellValueFactory(
-                new PropertyValueFactory<Invoice, Double>("amount")
+                new PropertyValueFactory<>("amount")
         );
 
         /*TODO: load the list chooser with all the clients, also have to update this when adding and removing client
@@ -137,7 +141,6 @@ public class InvoicesController implements Initializable {
     public void btnChangeCompanyClicked(ActionEvent event) {
         //TODO: This should open a new window with a new controller, maybe we should have this as another tab instead?
         System.out.println("btnChangeCompanyClicked");
-
     }
 
     @FXML
@@ -156,9 +159,7 @@ public class InvoicesController implements Initializable {
 
     @FXML
     void invoicesTableViewClicked(MouseEvent event) {
-        System.out.println("invoicesTableViewClicked");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
-        //System.out.println(invoicesTableView);
 
         //Set information to forms
         if (selectedInvoice != null) {
@@ -177,7 +178,6 @@ public class InvoicesController implements Initializable {
             btnRemoveInvoice.setDisable(false);
             btnSaveInvoice.setDisable(false);
 
-            System.out.println(selectedInvoice);
         } else {
             btnGenerateInvoice.setDisable(false);
             btnRemoveInvoice.setDisable(true);
@@ -187,7 +187,6 @@ public class InvoicesController implements Initializable {
 
     @FXML
     public void btnGenerateInvoiceClicked(ActionEvent event) {
-        System.out.println("btnGenerateInvoiceClicked");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         String selectedClientName = clientChooser.getValue();
@@ -204,14 +203,10 @@ public class InvoicesController implements Initializable {
 
             loadInvoicesList();
         }
-
-
-        System.out.println("btnGenerateInvoiceClicked - finished");
     }
 
     @FXML
     public void btnRemoveInvoice(ActionEvent event) {
-        System.out.println("btnRemoveInvoice");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
         if (selectedInvoice != null) {
             invoiceRepository.delete(selectedInvoice);
@@ -235,7 +230,6 @@ public class InvoicesController implements Initializable {
 
     @FXML
     public void btnSaveClicked(ActionEvent event) {
-        System.out.println("btnSaveClicked");
         Invoice selectedInvoice = invoicesTableView.getSelectionModel().getSelectedItem();
         if (selectedInvoice != null) {
             String selectedClientName = clientChooser.getValue();
@@ -252,35 +246,29 @@ public class InvoicesController implements Initializable {
                     selectedInvoice.updateTotalHours(selectedClient, beginDatePicker.getValue(), endDatePicker.getValue());
                     selectedInvoice.updateAmount(selectedClient);
                     selectedInvoice.setInvoiceDate(invoiceDate);
+                    selectedInvoice.setDescription(description);
                     invoiceRepository.save(selectedInvoice);
                 }
             }
+            loadInvoicesList();
+
+            //update form with new values
+            lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
+            lblAmount.setText(twoDecimals.format(selectedInvoice.getAmount()));
         }
-        loadInvoicesList();
-
-        //update form with new values
-        lblHours.setText(Double.toString(selectedInvoice.getTotalHours()));
-        lblAmount.setText(twoDecimals.format(selectedInvoice.getAmount()));
-
-        System.out.println("btnSaveClicked - finished");
     }
 
     public void reloadClientList() {
-        System.out.println("reloadClientList");
         clientChooser.getItems().clear();
         clientChooser.setItems(clientList);
-        clientRepository.findAll().forEach((client) -> {
-            clientList.add(client.getName());
-        });
+        clientRepository.findAll().forEach((client) -> clientList.add(client.getName()));
     }
 
     private void loadInvoicesList() {
         invoiceList = FXCollections.observableArrayList();
 
         Iterable<Invoice> allInvoice = invoiceRepository.findAll();
-        allInvoice.forEach((invoice) -> {
-            invoiceList.add(invoice);
-        });
+        allInvoice.forEach((invoice) -> invoiceList.add(invoice));
 
         invoicesTableView.setItems(invoiceList);
     }

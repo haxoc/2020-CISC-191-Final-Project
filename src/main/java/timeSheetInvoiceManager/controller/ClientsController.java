@@ -5,38 +5,38 @@
  */
 package timeSheetInvoiceManager.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
-
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import timeSheetInvoiceManager.client.Client;
 import timeSheetInvoiceManager.client.ClientRepository;
-
-import java.util.Optional;
-
-import javafx.fxml.Initializable;
+import timeSheetInvoiceManager.services.MainServiceCoordinator;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-import timeSheetInvoiceManager.services.MainServiceCoordinator;
-import timeSheetInvoiceManager.timesheet.TimeSheetEntry;
-
 /**
- * @author xaboo
+ * Controls the clients tab UI, lets the user add remove and edit clients and their hourly rate.
+ *
+ * @author chesteraustin, haxoc
  */
+@SuppressWarnings("unused")
 @Component
 @FxmlView("clients.fxml")
 public class ClientsController implements Initializable {
 
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
     @FXML
     private Button btnSave;
@@ -51,7 +51,7 @@ public class ClientsController implements Initializable {
     private final ObservableList<String> clientList = FXCollections.observableArrayList();
 
     /**
-     * @param clientRepository
+     * @param clientRepository autowired
      */
     @Autowired
     public ClientsController(ClientRepository clientRepository) {
@@ -59,21 +59,14 @@ public class ClientsController implements Initializable {
         MainServiceCoordinator.getInstance().setClientsController(this);
     }
 
-    /**
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Clients Controller initialized");
-
         reloadClientListView();
         resetInputFields();
     }
 
     @FXML
     public void clientListClicked(MouseEvent mouseEvent) {
-        System.out.println("Client list Clicked");
         Client client = getClientFromListView();
 
         if (client != Client.NONE) {
@@ -82,16 +75,13 @@ public class ClientsController implements Initializable {
             this.txtRate.setText(client.getRate().toString());
             this.txtRate.setDisable(false);
             this.txtAddress.setText(client.getAddress());
-            this.txtAddress.setDisable(false);        
-        }
-        else {
+            this.txtAddress.setDisable(false);
+        } else {
             resetInputFields();
-        }        
+        }
     }
 
-    /**
-     * @param actionEvent
-     */
+
     public void btnSaveClicked(ActionEvent actionEvent) {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
@@ -103,15 +93,14 @@ public class ClientsController implements Initializable {
 
                 clientRepository.save(client);
             } catch (NumberFormatException e) {
-                System.out.println(e);
+                System.out.println(e.toString());
                 System.out.println("Rate is either empty or not a number");
             }
 
             //Update the projects controller whenever we save the client here
             reloadClientListView();
             updateClientListViewInOtherControllers();
-        }
-        else {
+        } else {
             resetInputFields();
         }
     }
@@ -120,7 +109,6 @@ public class ClientsController implements Initializable {
         Client client = getClientFromListView();
         if (client != Client.NONE) {
             clientRepository.delete(client);
-            System.out.println("Client Removed: " + client);
         }
 
         reloadClientListView();
@@ -130,17 +118,16 @@ public class ClientsController implements Initializable {
 
     public void btnAddClicked(ActionEvent actionEvent) {
         try {
-            if (!clientRepository.findByName("NEW CLIENT").isPresent()) {
+            if (clientRepository.findByName("NEW CLIENT").isEmpty()) {
                 clientRepository.save(new Client("NEW CLIENT", -1.0, ""));
-                System.out.println("Client saved");
             }
 
         } catch (NumberFormatException e) {
             System.out.println("hourly rate is not a double");
-            System.out.println(e);
+            System.out.println(e.toString());
         } catch (NullPointerException e) {
             System.out.println("Rate is empty");
-            System.out.println(e);
+            System.out.println(e.toString());
         }
 
         //Show names to Contact list
@@ -153,7 +140,6 @@ public class ClientsController implements Initializable {
 
     private Client getClientFromListView() {
         String clientName = listContacts.getSelectionModel().getSelectedItem();
-        System.out.println(clientName);
         if (clientName != null) {
             Optional<Client> selectedClient = clientRepository.findByName(clientName);
             if (selectedClient.isPresent()) {
@@ -166,10 +152,7 @@ public class ClientsController implements Initializable {
     private void reloadClientListView() {
         listContacts.getItems().clear();
         listContacts.setItems(clientList);
-        clientRepository.findAll().forEach((client) -> {
-            System.out.println("Adding client to list: " + client.toString());
-            clientList.add(client.getName());
-        });
+        clientRepository.findAll().forEach((client) -> clientList.add(client.getName()));
     }
 
     private void updateClientListViewInOtherControllers() {

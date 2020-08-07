@@ -38,6 +38,7 @@ public class TimeSheet {
         this.endDate = endDate;
     }
 
+    @SuppressWarnings("unused")
     protected TimeSheet() {
     }
 
@@ -49,8 +50,9 @@ public class TimeSheet {
         this.project = project;
     }
 
-    public TimeSheetEntry getEntry(TimeSheetEntry entry) {
-        return entries.get(entry.getMapId());
+    @SuppressWarnings("unused")
+    public TimeSheetEntry getEntry(String mapId) {
+        return entries.get(mapId);
     }
 
     //TODO: maybe check that entry is in the time sheet's month
@@ -71,6 +73,7 @@ public class TimeSheet {
         return id;
     }
 
+    @SuppressWarnings("unused")
     protected void setId(Integer id) {
         this.id = id;
     }
@@ -86,14 +89,17 @@ public class TimeSheet {
         return beginDate;
     }
 
+    @SuppressWarnings("unused")
     public void setBeginDate(LocalDate beginDate) {
         this.beginDate = beginDate;
     }
 
+    @SuppressWarnings("unused")
     public LocalDate getEndDate() {
         return endDate;
     }
 
+    @SuppressWarnings("unused")
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }

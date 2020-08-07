@@ -67,24 +67,19 @@ public class Client {
         this.address = address;
     }
 
-
     public boolean isActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
-        if(!isActive) {
+        if (!isActive) {
             projects.forEach((name, project) -> project.setActive(false));
         }
     }
 
     public void addProject(Project project) {
         projects.put(project.getName(), project);
-    }
-
-    public void replaceProject(Project project) {
-        projects.replace(project.getName(), project);
     }
 
     public void removeProject(Project project) {

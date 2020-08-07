@@ -4,6 +4,11 @@ import timeSheetInvoiceManager.controller.ClientsController;
 import timeSheetInvoiceManager.controller.InvoicesController;
 import timeSheetInvoiceManager.controller.ProjectsController;
 
+/**
+ * This class lets different UI controllers interact with each other by holding instances of all the controllers,
+ * we mainly use this to update the client lists across the tabs.
+ * @author haxoc
+ */
 public class MainServiceCoordinator {
 
     private static final MainServiceCoordinator coordinator = new MainServiceCoordinator();
@@ -19,6 +24,7 @@ public class MainServiceCoordinator {
     private MainServiceCoordinator() {
     }
 
+    @SuppressWarnings("unused")
     public ClientsController getClientsController() {
         return clientsController;
     }

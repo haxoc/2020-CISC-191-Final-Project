@@ -53,10 +53,12 @@ public class Project {
     protected Project() {
     }
 
+    @SuppressWarnings("unused")
     public double getRate() {
         return rate;
     }
 
+    @SuppressWarnings("unused")
     public void setRate(double rate) {
         this.rate = rate;
     }
@@ -74,12 +76,9 @@ public class Project {
         return id;
     }
 
+    @SuppressWarnings("unused")
     protected void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setTimeSheets(Map<LocalDate, TimeSheet> timeSheets) {
-        this.timeSheets = timeSheets;
     }
 
     public Map<LocalDate, TimeSheet> getTimeSheets() {
@@ -93,10 +92,12 @@ public class Project {
         return timeSheets.get(yearMonth);
     }
 
+    @SuppressWarnings("unused")
     public void addTimeSheet(TimeSheet timeSheet) {
         timeSheets.put(timeSheet.getBeginDate(), timeSheet);
     }
 
+    @SuppressWarnings("unused")
     public void removeTimeSheet(LocalDate beginDate) {
         timeSheets.remove(beginDate);
     }
@@ -110,6 +111,7 @@ public class Project {
         client.addProject(this);
     }
 
+    @SuppressWarnings("unused")
     public boolean isActive() {
         return isActive;
     }
